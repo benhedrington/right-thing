@@ -2,11 +2,15 @@
 name: plan-prd
 description: "Turn messy real-world PM input — forwarded sales notes, stakeholder asks, call summaries — into a problem-anchored PRD. Use when raw product requests arrive and a PRD is needed, not when a clean spec already exists."
 metadata:
-  version: "0.3.4"
+  version: "0.3.5"
   inspired-by: "kazdenc/builder-skills :: prd (section skeleton, testability gates); pratikshadake/claude-product-management-skills :: outcome-definition (metric-baseline-timeframe chain); pratikshadake/claude-product-management-skills :: problem-clarity (workarounds as evidence); RefoundAI/lenny-skills :: defining-product-strategy (crux framing, clarity over certainty); alirezarezvani/claude-skills :: code-to-prd (evidence tagging, dependency mapping)"
 ---
 
 # plan-prd — from messy input to a problem-anchored PRD
+
+**Output is a file, always.** The deliverable is a written artifact, not a chat reply: the request
+is answered inside the artifact's decision header, the file is saved, and its path is named in the
+closing message. A conversational answer alone is an incomplete run. Put the file in the working directory (or the artifacts directory if one exists) — never inside the inputs. The decision header is the artifact's first section, under the exact heading `## Decision header`, with **Verdict:**, **Confidence:** and **Top 3 actions** labelled as such.
 
 ## Inputs
 
@@ -18,8 +22,8 @@ metadata:
   records, prior PRDs) itself. Fetched data counts as evidence only when it carries a cited path
   or query; uncited fetched data is an assumption; data that exists nowhere is a named data pull,
   never a finding.
-- Persistence: save the output to `<dir>/plan-prd-<slug>.md` (`<dir>` = the session's
-  working-artifacts directory; ask once if not obvious); before starting, look in `<dir>` for
+- Persistence: the artifact is the deliverable; its absence is an incomplete run. Never skip the file because the request reads as a conversation. Save the output to `<dir>/plan-prd-<slug>.md` (`<dir>` = the session's
+  working-artifacts directory, or the working directory if none exists; never into the input directory itself); before starting, look in `<dir>` for
   learn-triage's to-plan signal memo (`learn-triage-*.md`) — its verified clusters enter the ledger.
 
 ## Stance
@@ -96,6 +100,10 @@ Open questions table: question | owner | deadline | consequence-if-unanswered.
 "None" is allowed only when the ledger holds zero unknown-confidence fragments.
 
 ## Output format
+
+**The artifact is the deliverable, not a chat reply.** If the request reads as a question, the
+decision header is the answer — and the full artifact is still produced and saved to the path below.
+A message in the conversation may summarize it; a summary never replaces it.
 
 1. Decision header, first — as long as the verdict and its actions need, and no longer: a one-sentence verdict (the first move: full PRD,
    narrowed PRD, or discovery note, and why); confidence (high/medium/low) with its basis; the

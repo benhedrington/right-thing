@@ -1,6 +1,28 @@
 # Changelog
 
-## 2026-09-27 — all skills at 0.3.4 (first public release)
+## 2026-09-27 — all skills at 0.3.5 (first public release)
+
+The artifact became non-optional, and the format contract became exact. Three changes, all of them
+found by running the skills on realistic requests rather than by reading them:
+
+- **Output is a file, always.** It is now the first line of every skill body. Sent a request phrased
+  as a question, four of five runs invoked the right skill, reasoned well, and returned a chat reply
+  with no artifact — the rule existed but sat far enough down that the conversational reading won.
+  The skill now states that the file is the deliverable, that a chat summary never replaces it, and
+  that its absence is an incomplete run. Verified: eleven runs across consumer web and mobile, all
+  eleven produced the artifact.
+- **The decision header has an exact spelling.** `## Decision header`, with **Verdict:**,
+  **Confidence:** and **Top 3 actions**. Observed drift (`## Decision` in one artifact) is invisible
+  in a single run and fatal to a stable format, so it is now prescribed verbatim.
+- **Artifacts never go in the inputs directory.** One run saved its memo into `bundle/` alongside the
+  files it was given; the skills now say where the file goes.
+
+Also in this revision: **length is a judgement, not a line count** — the hard 120-word header cap and
+the strict ~1,500-word body limit are retired, with padding and dropped substance as the failures
+instead of a number (the cap was in direct conflict with the provenance lines the headers also
+require). And the plays now name the exact path in their closing message.
+
+## 2026-09-27 — all skills at 0.3.4
 
 Length stopped being a line count. The hard 120-word cap on the decision header is retired, along
 with the strict ~1,500-word body limit: the header now runs as long as the verdict, its confidence

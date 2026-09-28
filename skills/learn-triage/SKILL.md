@@ -2,11 +2,15 @@
 name: learn-triage
 description: "Convert a raw dump of tickets, feedback, and requests into prioritized signal and routing decisions. Use when feedback volume arrives (support export, reviews, sales notes) and the next plan cycle needs to know what it means."
 metadata:
-  version: "0.3.4"
+  version: "0.3.5"
   inspired-by: "right-thing :: plan-prd (fragment-ledger discipline)"
 ---
 
 # learn-triage — feedback dump to routed signal
+
+**Output is a file, always.** The deliverable is a written artifact, not a chat reply: the request
+is answered inside the artifact's decision header, the file is saved, and its path is named in the
+closing message. A conversational answer alone is an incomplete run. Put the file in the working directory (or the artifacts directory if one exists) — never inside the inputs. The decision header is the artifact's first section, under the exact heading `## Decision header`, with **Verdict:**, **Confidence:** and **Top 3 actions** labelled as such.
 
 ## Inputs
 
@@ -17,8 +21,8 @@ metadata:
 - The agent may fetch support tags, usage, and churn data itself. Fetched data counts as evidence
   only when it carries a cited path or query; uncited fetched data is an assumption; data that
   exists nowhere is a named data pull, never a finding.
-- Persistence: save the output to `<dir>/learn-triage-<slug>.md` (`<dir>` = the session's
-  working-artifacts directory; ask once if not obvious); before starting, look in `<dir>` for
+- Persistence: the artifact is the deliverable; its absence is an incomplete run. Never skip the file because the request reads as a conversation. Save the output to `<dir>/learn-triage-<slug>.md` (`<dir>` = the session's
+  working-artifacts directory, or the working directory if none exists; never into the input directory itself); before starting, look in `<dir>` for
   upstream artifacts — none for this play: its input is raw dumps.
 
 ## Stance
@@ -61,6 +65,10 @@ ledger stays auditable. Praise is signal about what to protect, never about what
    evidence widens — cf. plan-direction's loud-small-sample probe).
 
 ## Output format
+
+**The artifact is the deliverable, not a chat reply.** If the request reads as a question, the
+decision header is the answer — and the full artifact is still produced and saved to the path below.
+A message in the conversation may summarize it; a summary never replaces it.
 
 Decision header, first — as long as the verdict and its actions need, and no longer: a one-sentence verdict (the cluster that matters most
 and where it routes); confidence (high/medium/low) with its basis; the top 3 actions, each with an

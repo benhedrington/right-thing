@@ -2,11 +2,15 @@
 name: learn-retro
 description: "Compare expected vs actual after a launch or planning cycle; extract behavior-changing learnings and a prediction-calibration note. Use 60-90 days post-launch, post-quarter, or after any plan's results are in."
 metadata:
-  version: "0.3.4"
+  version: "0.3.5"
   inspired-by: "right-thing :: plan-prd (fragment-ledger discipline -> quoted expectations)"
 ---
 
 # learn-retro — expected vs actual, honestly
+
+**Output is a file, always.** The deliverable is a written artifact, not a chat reply: the request
+is answered inside the artifact's decision header, the file is saved, and its path is named in the
+closing message. A conversational answer alone is an incomplete run. Put the file in the working directory (or the artifacts directory if one exists) — never inside the inputs. The decision header is the artifact's first section, under the exact heading `## Decision header`, with **Verdict:**, **Confidence:** and **Top 3 actions** labelled as such.
 
 ## Inputs
 
@@ -17,8 +21,8 @@ metadata:
 - The agent may fetch the dashboards, exports and account records behind the actuals itself.
   Fetched data counts as evidence only when it carries a cited path or query; uncited fetched
   data is an assumption; data that exists nowhere is a named data pull, never a finding.
-- Persistence: save the output to `<dir>/learn-retro-<slug>.md` (`<dir>` = the session's
-  working-artifacts directory; ask once if not obvious); before starting, look in `<dir>` for
+- Persistence: the artifact is the deliverable; its absence is an incomplete run. Never skip the file because the request reads as a conversation. Save the output to `<dir>/learn-retro-<slug>.md` (`<dir>` = the session's
+  working-artifacts directory, or the working directory if none exists; never into the input directory itself); before starting, look in `<dir>` for
   plan-prd's outcome targets (`plan-prd-*.md`) and plan-direction's predictions
   (`plan-direction-*.md`).
 
@@ -54,6 +58,10 @@ plan, not passes.
 7. **Next-cycle feed.** Which learnings change which upcoming decisions, stated as handoffs.
 
 ## Output format
+
+**The artifact is the deliverable, not a chat reply.** If the request reads as a question, the
+decision header is the answer — and the full artifact is still produced and saved to the path below.
+A message in the conversation may summarize it; a summary never replaces it.
 
 Decision header, first — as long as the verdict and its actions need, and no longer: a one-sentence verdict (did the plan land — the
 beat / met / missed / unmeasured tally); confidence (high/medium/low) with its basis; the top 3

@@ -2,11 +2,15 @@
 name: plan-improve
 description: "Red-pen an existing PRD: emit a defect list (each defect named, quoted, must-fix vs nit) and a rewritten build-ready PRD. Use when a PRD of unknown quality exists and needs to become usable."
 metadata:
-  version: "0.3.4"
+  version: "0.3.5"
   inspired-by: "pratikshadake/claude-product-management-skills :: prd-critic (verdict-with-findings format); pratikshadake/claude-product-management-skills :: problem-clarity (evidence gate); pratikshadake/claude-product-management-skills :: roadmap-reality-checker (capacity/dependency checks); kazdenc/builder-skills :: prd (what good looks like)"
 ---
 
 # plan-improve — defect list + build-ready rewrite
+
+**Output is a file, always.** The deliverable is a written artifact, not a chat reply: the request
+is answered inside the artifact's decision header, the file is saved, and its path is named in the
+closing message. A conversational answer alone is an incomplete run. Put the file in the working directory (or the artifacts directory if one exists) — never inside the inputs. The decision header is the artifact's first section, under the exact heading `## Decision header`, with **Verdict:**, **Confidence:** and **Top 3 actions** labelled as such.
 
 ## Inputs
 
@@ -16,8 +20,8 @@ metadata:
 - The agent may fetch the docs, tickets and data the PRD references itself. Fetched data counts as
   evidence only when it carries a cited path or query; uncited fetched data is an assumption; data
   that exists nowhere is a named data pull, never a finding.
-- Persistence: save the output to `<dir>/plan-improve-<slug>.md` (`<dir>` = the session's
-  working-artifacts directory; ask once if not obvious); before starting, look in `<dir>` for any
+- Persistence: the artifact is the deliverable; its absence is an incomplete run. Never skip the file because the request reads as a conversation. Save the output to `<dir>/plan-improve-<slug>.md` (`<dir>` = the session's
+  working-artifacts directory, or the working directory if none exists; never into the input directory itself); before starting, look in `<dir>` for any
   existing PRD, often plan-prd's (`plan-prd-*.md`).
 
 ## Stance
@@ -76,6 +80,10 @@ If no — must-fix.
   cover the core problem only.
 
 ## Output contract
+
+**The artifact is the deliverable, not a chat reply.** If the request reads as a question, the
+decision header is the answer — and the full artifact is still produced and saved to the path below.
+A message in the conversation may summarize it; a summary never replaces it.
 
 Decision header, first — as long as the verdict and its actions need, and no longer: a one-sentence verdict (build-ready,
 needs-revision, or not-a-PRD, with the must-fix count); confidence (high/medium/low) with its

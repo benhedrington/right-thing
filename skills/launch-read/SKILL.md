@@ -2,11 +2,15 @@
 name: launch-read
 description: "Pre-ship audit of a feature or product: instrument check, criteria sweep, risk and support readiness, open-question audit. Outputs go / go-with-conditions / no-go. Use before GA or a major release."
 metadata:
-  version: "0.3.4"
+  version: "0.3.5"
   inspired-by: "right-thing :: plan-prd (testable-requirements gate -> the criteria sweep)"
 ---
 
 # launch-read — pre-ship audit, go/no-go
+
+**Output is a file, always.** The deliverable is a written artifact, not a chat reply: the request
+is answered inside the artifact's decision header, the file is saved, and its path is named in the
+closing message. A conversational answer alone is an incomplete run. Put the file in the working directory (or the artifacts directory if one exists) — never inside the inputs. The decision header is the artifact's first section, under the exact heading `## Decision header`, with **Verdict:**, **Confidence:** and **Top 3 actions** labelled as such.
 
 ## Inputs
 
@@ -18,8 +22,8 @@ metadata:
   itself. Fetched data counts as evidence only when it carries a cited path or query; uncited
   fetched data is an assumption; data that exists nowhere is a named data pull, never a finding.
 - In a repo, check instrumentation, flags, migrations and tests before marking a check failed.
-- Persistence: save the output to `<dir>/launch-read-<slug>.md` (`<dir>` = the session's
-  working-artifacts directory; ask once if not obvious); before starting, look in `<dir>` for
+- Persistence: the artifact is the deliverable; its absence is an incomplete run. Never skip the file because the request reads as a conversation. Save the output to `<dir>/launch-read-<slug>.md` (`<dir>` = the session's
+  working-artifacts directory, or the working directory if none exists; never into the input directory itself); before starting, look in `<dir>` for
   plan-prd and plan-split outputs, and kill criteria from plan-prd or plan-direction.
 
 ## Stance
@@ -64,6 +68,10 @@ recorded as "unnamed — must be named", never invented.
   an unrun security-boundary criterion, or an open question past deadline is no-go-level, not a condition
 
 ## Output format
+
+**The artifact is the deliverable, not a chat reply.** If the request reads as a question, the
+decision header is the answer — and the full artifact is still produced and saved to the path below.
+A message in the conversation may summarize it; a summary never replaces it.
 
 Decision header, first — as long as the verdict and its actions need, and no longer: a one-sentence verdict (go, go-with-conditions, or
 no-go); confidence (high/medium/low) with its basis; the top 3 actions, each with an owner.

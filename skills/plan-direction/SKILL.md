@@ -2,11 +2,15 @@
 name: plan-direction
 description: "Weigh 2-4 competing product directions and recommend one: frozen weighted criteria, reasoning-trap audit, reversibility and sequencing, kill criteria. Use when the debate is which bet to make next."
 metadata:
-  version: "0.3.4"
+  version: "0.3.5"
   inspired-by: "RefoundAI/lenny-skills :: evaluating-trade-offs (cost of inaction, named biases, flip question); RefoundAI/lenny-skills :: defining-product-strategy (diagnose the crux, clarity over certainty); pratikshadake/claude-product-management-skills :: tradeoff-articulator (gain/lose/why-now contract); pratikshadake/claude-product-management-skills :: user-segment-prioritizer (criteria-first rubric, rejected options stay visible); kazdenc/builder-skills :: lean-canvas (every box a bet, riskiest assumption first)"
 ---
 
 # plan-direction — weigh competing bets, recommend one
+
+**Output is a file, always.** The deliverable is a written artifact, not a chat reply: the request
+is answered inside the artifact's decision header, the file is saved, and its path is named in the
+closing message. A conversational answer alone is an incomplete run. Put the file in the working directory (or the artifacts directory if one exists) — never inside the inputs. The decision header is the artifact's first section, under the exact heading `## Decision header`, with **Verdict:**, **Confidence:** and **Top 3 actions** labelled as such.
 
 ## Inputs
 
@@ -17,8 +21,8 @@ metadata:
 - The agent may fetch the metrics, estimates and prior decision docs behind each option itself.
   Fetched data counts as evidence only when it carries a cited path or query; uncited fetched
   data is an assumption; data that exists nowhere is a named data pull, never a finding.
-- Persistence: save the output to `<dir>/plan-direction-<slug>.md` (`<dir>` = the session's
-  working-artifacts directory; ask once if not obvious); before starting, look in `<dir>` for
+- Persistence: the artifact is the deliverable; its absence is an incomplete run. Never skip the file because the request reads as a conversation. Save the output to `<dir>/plan-direction-<slug>.md` (`<dir>` = the session's
+  working-artifacts directory, or the working directory if none exists; never into the input directory itself); before starting, look in `<dir>` for
   learn-retro's next-cycle handoffs (`learn-retro-*.md`).
 
 ## Stance
@@ -65,6 +69,10 @@ planning horizon). If the winner forecloses, raise the evidence bar or carve a c
 increment that preserves optionality. Weighted totals within 10 points (on the 100 scale): favor the option whose compounding cheap wins land earliest.
 
 ### 6. Write the memo
+
+**The artifact is the deliverable, not a chat reply.** If the request reads as a question, the
+decision header is the answer — and the full artifact is still produced and saved to the path below.
+A message in the conversation may summarize it; a summary never replaces it.
 
 - Decision header, first — as long as the verdict and its actions need, and no longer: a one-sentence verdict (the recommended direction
   or sequence); confidence (high/medium/low) with its basis — which evidence dominates; the top 3
