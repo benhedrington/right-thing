@@ -1,0 +1,16 @@
+# Working files kept out of the published repo
+testbench/
+sources/
+reviews/
+TEAM.md
+QUESTIONS.md
+EXPERT.md
+REPO-READINESS.md
+docs/
+skills/MANIFEST.md
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*~
