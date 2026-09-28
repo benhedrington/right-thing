@@ -7,7 +7,7 @@ Eight skills for the product-management side of agent work: **Plan, Launch, Lear
 deliberately missing — your build harness owns that. Nothing here depends on superpowers, and
 superpowers does not depend on this. Each works without the other.
 
-> **Status: early.** These are version 0.3.4. So far they have been tried only on our own sample
+> **Status: early.** These are version 0.3.5. So far they have been tried only on our own sample
 > inputs, and we have not yet checked how they behave when the input is genuinely sound, so a
 > cautious verdict (no-go, needs-revision, a discovery note instead of a PRD) may be over-cautious.
 > Expect changes. Treat the output as a first draft a good PM would review, not a finished
@@ -63,7 +63,7 @@ For one project only, use that project's `.claude/skills/` as the destination in
 with `mkdir -p` first). Then type a skill's name as a command, such as `/launch-read`, followed by
 your input, or describe the task and let the agent pick the skill.
 
-Verified at 0.3.3 with Claude Code on Linux (0.3.4 changed prose only, not the install path): all eight load from a project's `.claude/skills/`,
+Verified at 0.3.3 with Claude Code on Linux (every change since is skill prose only, never the install path): all eight load from a project's `.claude/skills/`,
 and one or all eight load from `~/.claude/skills/`. `/launch-read`, invoked by name, ran from the
 project install and from the one-skill personal install. In one try, the agent also picked
 `launch-read` without being named. Not yet run: the `git clone` step itself. If a skill fails to
