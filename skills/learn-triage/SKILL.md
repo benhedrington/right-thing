@@ -3,7 +3,7 @@ name: learn-triage
 description: "Convert a raw dump of tickets, feedback, and requests into prioritized signal and routing decisions. Use when feedback volume arrives (support export, reviews, sales notes) and the next plan cycle needs to know what it means."
 metadata:
   version: "0.4.0"
-  inspired-by: "right-thing :: plan-prd (fragment-ledger discipline)"
+  inspired-by: "see CREDITS.md"
 ---
 
 # learn-triage — feedback dump to routed signal

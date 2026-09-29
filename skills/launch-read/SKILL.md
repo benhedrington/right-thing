@@ -3,7 +3,7 @@ name: launch-read
 description: "Pre-ship audit of a feature or product: instrument check, criteria sweep, risk and support readiness, open-question audit. Outputs go / go-with-conditions / no-go. Use before GA or a major release."
 metadata:
   version: "0.4.0"
-  inspired-by: "right-thing :: plan-prd (testable-requirements gate -> the criteria sweep)"
+  inspired-by: "see CREDITS.md"
 ---
 
 # launch-read — pre-ship audit, go/no-go

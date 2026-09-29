@@ -1,49 +1,39 @@
 # Credits
 
-The eight skills in this repository are original work. While designing them, we studied
-open-source skill collections by other authors, and some of the skills' structure came from
-ideas in those collections. Those ideas are **credited, not copied**: no file, section, or
-passage from these sources is copied into this repository.
+The eight skills in this repository are original work. While designing them we studied
+open-source PM skill collections by other authors, and their ideas shaped ours. Those ideas
+are **credited, not copied**: no file, section or passage from these sources appears in this
+repository. To read the originals, visit each repository under its own license (all MIT).
 
-**Third-party skill collections are not redistributed here.** To read the originals, go to
-their own repositories, under their own licenses.
+## Sources and what we took from them
 
-## Sources whose ideas informed the skills
-
-**[kazdenc/builder-skills](https://github.com/kazdenc/builder-skills)** — the `prd` and
-`lean-canvas` skills.
-- plan-prd: section skeleton, testability gates
-- plan-improve: what a good PRD looks like
-- plan-split: testability gates, citation discipline
-- plan-direction: every box is a bet, riskiest assumption first
+**[kazdenc/builder-skills](https://github.com/kazdenc/builder-skills)**
+A PRD skeleton with testability gates; stories and acceptance criteria that trace back to
+requirements; lean-canvas thinking: every box is a bet, riskiest assumption first.
 
 **[pratikshadake/claude-product-management-skills](https://github.com/pratikshadake/claude-product-management-skills)**
-— the `prd-critic`, `problem-clarity`, `outcome-definition`, `roadmap-reality-checker`,
-`tradeoff-articulator`, and `user-segment-prioritizer` skills.
-- plan-improve: verdict-with-findings format, evidence gate, capacity and dependency checks
-- plan-prd: the metric–baseline–timeframe chain, workarounds as evidence
-- plan-split: dependency checks
-- plan-direction: gain / lose / why-now, a criteria-first rubric, rejected options stay visible
+A verdict-with-findings PRD critique; problem clarity, with workarounds as evidence; the
+metric–baseline–timeframe outcome chain; capacity and dependency reality checks; gain / lose /
+why-now trade-offs; criteria-first prioritization. Its launch-readiness, post-launch-learning
+and experiment-design skills cover the same ground as our launch, retro and experiment skills.
 
-**[RefoundAI/lenny-skills](https://github.com/RefoundAI/lenny-skills)** — the
-`evaluating-trade-offs` and `defining-product-strategy` skills.
-- plan-direction: cost of inaction, named biases, the flip question, diagnosing the crux
-- plan-prd: crux framing, clarity over certainty
+**[RefoundAI/lenny-skills](https://github.com/RefoundAI/lenny-skills)**
+Diagnosing the crux of a strategy; clarity over certainty; the cost of inaction, named biases,
+and the question "what would flip this decision?"
 
-**[alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills)** — the
-`code-to-prd` skill.
-- plan-prd: evidence tagging, dependency mapping
+**[alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills)**
+Evidence tagging and dependency mapping when turning raw material into a PRD.
 
-launch-read, learn-retro, learn-experiment, and learn-triage build on disciplines from the
-other skills in this repo. For example, the fragment ledger comes from plan-prd and the
-kill-criteria discipline from plan-direction. They cite no outside source.
+**[mattpocock/skills](https://github.com/mattpocock/skills)**
+The grill-me skill: stress-testing a plan by questioning it relentlessly until nothing is left
+silently assumed. The same spirit runs through these skills' refusal to accept an unexamined claim.
 
-Each skill's `inspired-by:` frontmatter records these credits at the skill level. That
-frontmatter is authoritative: if this page and a skill ever disagree, the skill is right, and
-this page has a bug.
+The influence shows most in the plan-phase skills (plan-prd, plan-improve, plan-split,
+plan-direction). The launch and learn skills build mainly on disciplines from the plan skills
+in this repo, such as the fragment ledger and kill criteria.
 
 ## Positioning
 
 **[obra/superpowers](https://github.com/obra/superpowers)** is the build-side skill set this
-repo is designed to sit alongside. It is not a source for any skill, and neither project depends
-on the other.
+repo is designed to sit alongside. It is not a source for any skill, and neither project
+depends on the other.

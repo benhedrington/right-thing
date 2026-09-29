@@ -3,7 +3,7 @@ name: plan-prd
 description: "Turn messy real-world PM input — forwarded sales notes, stakeholder asks, call summaries — into a problem-anchored PRD. Use when raw product requests arrive and a PRD is needed, not when a clean spec already exists."
 metadata:
   version: "0.4.0"
-  inspired-by: "kazdenc/builder-skills :: prd (section skeleton, testability gates); pratikshadake/claude-product-management-skills :: outcome-definition (metric-baseline-timeframe chain); pratikshadake/claude-product-management-skills :: problem-clarity (workarounds as evidence); RefoundAI/lenny-skills :: defining-product-strategy (crux framing, clarity over certainty); alirezarezvani/claude-skills :: code-to-prd (evidence tagging, dependency mapping)"
+  inspired-by: "see CREDITS.md"
 ---
 
 # plan-prd — from messy input to a problem-anchored PRD

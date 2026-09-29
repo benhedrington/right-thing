@@ -3,7 +3,7 @@ name: learn-retro
 description: "Compare expected vs actual after a launch or planning cycle; extract behavior-changing learnings and a prediction-calibration note. Use 60-90 days post-launch, post-quarter, or after any plan's results are in."
 metadata:
   version: "0.4.0"
-  inspired-by: "right-thing :: plan-prd (fragment-ledger discipline -> quoted expectations)"
+  inspired-by: "see CREDITS.md"
 ---
 
 # learn-retro — expected vs actual, honestly

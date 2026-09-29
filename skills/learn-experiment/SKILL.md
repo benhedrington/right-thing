@@ -3,7 +3,7 @@ name: learn-experiment
 description: "Design a validation experiment: falsifiable hypothesis, decision rule set before data, sample-size arithmetic, guardrails, stop conditions. Use when a belief needs testing before it becomes a build."
 metadata:
   version: "0.4.0"
-  inspired-by: "right-thing :: plan-direction (kill-criteria discipline -> pre-registration)"
+  inspired-by: "see CREDITS.md"
 ---
 
 # learn-experiment — belief to tested decision

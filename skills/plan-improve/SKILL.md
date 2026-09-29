@@ -3,7 +3,7 @@ name: plan-improve
 description: "Red-pen an existing PRD: emit a defect list (each defect named, quoted, must-fix vs nit) and a rewritten build-ready PRD. Use when a PRD of unknown quality exists and needs to become usable."
 metadata:
   version: "0.4.0"
-  inspired-by: "pratikshadake/claude-product-management-skills :: prd-critic (verdict-with-findings format); pratikshadake/claude-product-management-skills :: problem-clarity (evidence gate); pratikshadake/claude-product-management-skills :: roadmap-reality-checker (capacity/dependency checks); kazdenc/builder-skills :: prd (what good looks like)"
+  inspired-by: "see CREDITS.md"
 ---
 
 # plan-improve — defect list + build-ready rewrite

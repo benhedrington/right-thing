@@ -168,8 +168,8 @@ accepts instructions. We have not tried this in any chat app, so treat it as unt
 ## Credits
 
 The skills are original work. Some ideas in their structure came from skills we studied by
-other authors. Those authors are credited in [CREDITS.md](CREDITS.md) and in each skill's
-`inspired-by:` frontmatter. No third-party content is included in this repository.
+other authors. Those authors are credited in [CREDITS.md](CREDITS.md). No third-party content is included in
+this repository.
 
 Positioning nod: [obra/superpowers](https://github.com/obra/superpowers), the build-side
 harness these skills are designed to sit alongside.

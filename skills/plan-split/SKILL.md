@@ -3,7 +3,7 @@ name: plan-split
 description: "Slice a PRD into epics and stories with testable acceptance criteria and dependency edges. Use after plan-prd when build planning starts, or when a plan needs to become assignable engineering work."
 metadata:
   version: "0.4.0"
-  inspired-by: "pratikshadake/claude-product-management-skills :: roadmap-reality-checker (dependency checks); kazdenc/builder-skills :: prd (testability gates, citation discipline)"
+  inspired-by: "see CREDITS.md"
 ---
 
 # plan-split — PRD to epics and stories
