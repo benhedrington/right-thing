@@ -2,15 +2,13 @@
 name: plan-prd
 description: "Turn messy real-world PM input — forwarded sales notes, stakeholder asks, call summaries — into a problem-anchored PRD. Use when raw product requests arrive and a PRD is needed, not when a clean spec already exists."
 metadata:
-  version: "0.3.5"
+  version: "0.4.0"
   inspired-by: "kazdenc/builder-skills :: prd (section skeleton, testability gates); pratikshadake/claude-product-management-skills :: outcome-definition (metric-baseline-timeframe chain); pratikshadake/claude-product-management-skills :: problem-clarity (workarounds as evidence); RefoundAI/lenny-skills :: defining-product-strategy (crux framing, clarity over certainty); alirezarezvani/claude-skills :: code-to-prd (evidence tagging, dependency mapping)"
 ---
 
 # plan-prd — from messy input to a problem-anchored PRD
 
-**Output is a file, always.** The deliverable is a written artifact, not a chat reply: the request
-is answered inside the artifact's decision header, the file is saved, and its path is named in the
-closing message. A conversational answer alone is an incomplete run. Put the file in the working directory (or the artifacts directory if one exists) — never inside the inputs. The decision header is the artifact's first section, under the exact heading `## Decision header`, with **Verdict:**, **Confidence:** and **Top 3 actions** labelled as such.
+**Output is always a file:** `<dir>/plan-prd-<slug>.md` (artifacts directory, else working directory; never the input's), path named in the closing message. Refusals write it too; chat alone is an incomplete run. It opens `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**), which alone may answer a quick question, file still written.
 
 ## Inputs
 
@@ -22,9 +20,8 @@ closing message. A conversational answer alone is an incomplete run. Put the fil
   records, prior PRDs) itself. Fetched data counts as evidence only when it carries a cited path
   or query; uncited fetched data is an assumption; data that exists nowhere is a named data pull,
   never a finding.
-- Persistence: the artifact is the deliverable; its absence is an incomplete run. Never skip the file because the request reads as a conversation. Save the output to `<dir>/plan-prd-<slug>.md` (`<dir>` = the session's
-  working-artifacts directory, or the working directory if none exists; never into the input directory itself); before starting, look in `<dir>` for
-  learn-triage's to-plan signal memo (`learn-triage-*.md`) — its verified clusters enter the ledger.
+- Persistence: before starting, look in `<dir>` for learn-triage's to-plan signal memo
+  (`learn-triage-*.md`) — its verified clusters enter the ledger.
 
 ## Stance
 
@@ -45,8 +42,8 @@ Decompose ALL input into one-line fragments before writing anything:
 - A documented ask (a record that someone asked for something) splits: the record's existence is
   a fact at evidence confidence; the demand behind it is an assumption.
 
-A number with no named source (input-furnished, or fetched with a cited path or query) is an
-assumption, never a finding; inventing a datum is never allowed. A named source is a checkable
+A number with no named source — furnished in the input, or fetched with a cited path or
+query — is an assumption, never a finding. A named source is a checkable
 one ("the August billing export", not "we hear"). A venue without a named owner ("a figure
 someone quoted at the offsite") is an assumption, not evidence. Commercial or commitment claims
 ("they'd roll it out to every region") are problem-signal (demand-side) at assumption confidence
@@ -66,6 +63,14 @@ The ledger is the audit trail: every later section cites fragment IDs.
 - Stated solutions are recorded as proposed-solution fragments: inputs to weigh, never the frame.
 - FEWER THAN 2 EVIDENCE FRAGMENTS: do not write the full PRD. Output a discovery note instead
   (what to learn, from whom, by when). A PRD built on one narrator is a mirror, not a decision.
+- WORKING WITH THIN DATA: when exactly one independent source is at evidence confidence and the
+  second does not exist in the org (no export, no telemetry, no second channel; not merely
+  unfetched), write a narrowed PRD, not a discovery note. It opens with "Central risk: thin
+  evidence", which names the one source, states plainly what is missing, and names the source that
+  would upgrade it to a full PRD. Scope is cut to what that one source supports; producing the
+  missing second source is requirement #1; confidence is never high. Zero evidence sources, or a
+  second source that exists but was not fetched, still gets the discovery note or the named data
+  pull.
 
 ### 3. Define outcomes as a chain
 
@@ -101,12 +106,8 @@ Open questions table: question | owner | deadline | consequence-if-unanswered.
 
 ## Output format
 
-**The artifact is the deliverable, not a chat reply.** If the request reads as a question, the
-decision header is the answer — and the full artifact is still produced and saved to the path below.
-A message in the conversation may summarize it; a summary never replaces it.
-
-1. Decision header, first — as long as the verdict and its actions need, and no longer: a one-sentence verdict (the first move: full PRD,
-   narrowed PRD, or discovery note, and why); confidence (high/medium/low) with its basis; the
+1. Decision header, first: a one-sentence verdict (the first move: full PRD,
+   narrowed PRD (including the thin-data path), or discovery note, and why); confidence (high/medium/low) with its basis; the
    top 3 actions, each with an owner.
 2. PRD: Problem (with fragment citations) / Outcomes chain / Non-goals /
    Requirements (cited, testable) / Dependencies & conflicts (with resolutions) / Decision clock /
@@ -114,23 +115,9 @@ A message in the conversation may summarize it; a summary never replaces it.
 3. Appendix A — fragment ledger (compact)
 4. Appendix B — scope decisions: accepted vs rejected requirements, with rationale on BOTH sides — why each accepted requirement earns its slot, and the fragment or reasoning behind each rejection
 
-Budget and overflow: length is a judgement, not a line count. The header runs as long as the
-verdict, its confidence and the top actions need, and then stops — no padding, no restating the
-verdict, no qualifier that changes nothing. If it would grow past that, each action compresses to a
-single clause and any rider (note, caveat, aside) moves to the body. The body carries the argument
-and the evidence; if it is running well past what the work needs, the excess moves to an appendix
-after the header, at the end of the artifact (the old ~1,500-word guide is a useful smell test, not
-a limit to hit). This is how completeness and length coexist: every mandated section is still
-completed — never cut to fit, nothing padded — by keeping its conclusion in the body and moving its
-supporting detail (full tables, ledgers, workings) to the appendix. Material is relocated, never
-dropped.
+Budget and overflow: the header holds only the verdict, its confidence and one-clause actions. Complete every mandated section; when the body runs long, move supporting detail (tables, workings) to an end appendix — relocated, never dropped.
 
-Derived numbers: every number derived from the input — a count, sum, share, percentage, delta or
-rate — is recomputed once from its source before it is published, with the arithmetic shown beside
-it (numerator and denominator, or the formula), and any claim resting on it (meets a target, a
-majority, the largest) asserts no more than that arithmetic shows. In the header, where words are
-capped, the arithmetic may sit at the figure's first statement in the body. Stating a real
-derivation wrongly is a different failure from inventing a datum; both are forbidden.
+Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
 
 ## Anti-patterns
 

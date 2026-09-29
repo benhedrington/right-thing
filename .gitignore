@@ -14,3 +14,6 @@ skills/MANIFEST.md
 Thumbs.db
 *.swp
 *~
+
+# internal documents, never published
+claude-review.md

@@ -7,7 +7,7 @@ Eight skills for the product-management side of agent work: **Plan, Launch, Lear
 deliberately missing — your build harness owns that. Nothing here depends on superpowers, and
 superpowers does not depend on this. Each works without the other.
 
-> **Status: early.** These are version 0.3.5. So far they have been tried only on our own sample
+> **Status: early.** These are version 0.4.0. So far they have been tried only on our own sample
 > inputs, and we have not yet checked how they behave when the input is genuinely sound, so a
 > cautious verdict (no-go, needs-revision, a discovery note instead of a PRD) may be over-cautious.
 > Expect changes. Treat the output as a first draft a good PM would review, not a finished
@@ -42,6 +42,24 @@ superpowers does not depend on this. Each works without the other.
 Each skill opens its output with a short decision header (verdict, confidence, top three actions
 with owners) and saves the result to a file, so the next skill in the loop can pick it up.
 
+## Words the skills use
+
+- **Fragment:** one line of the input (a quote or short paraphrase) with its source, so later
+  sections can point back to it.
+- **Evidence:** a claim that comes from a named source someone else could check.
+- **Assumption:** a claim that is plausible but has not been checked.
+- **Unknown:** something nobody knows yet. It gets an owner and a date, not a guess.
+- **Named data pull:** a specific query or export someone must run to answer a question. The
+  skills list it instead of inventing the answer.
+- **Decision clock:** a real date pushing the decision, such as a renewal or a board meeting, plus
+  a plain statement of what that date does and does not justify.
+- **Kill criteria:** a result and a date, written in advance, that mean "stop or rethink" if the
+  numbers land there.
+- **ITT (intention to treat):** count everyone put in each group of a test, even people who never
+  saw the change.
+- **Per-protocol:** count only the people who actually got the change. This tends to make results
+  look better, so the skills ask you to say which count you used.
+
 ## Install
 
 Every skill is one self-contained directory: `skills/<name>/SKILL.md`. Installing means copying
@@ -63,11 +81,13 @@ For one project only, use that project's `.claude/skills/` as the destination in
 with `mkdir -p` first). Then type a skill's name as a command, such as `/launch-read`, followed by
 your input, or describe the task and let the agent pick the skill.
 
-Verified at 0.3.3 with Claude Code on Linux (every change since is skill prose only, never the install path): all eight load from a project's `.claude/skills/`,
-and one or all eight load from `~/.claude/skills/`. `/launch-read`, invoked by name, ran from the
-project install and from the one-skill personal install. In one try, the agent also picked
-`launch-read` without being named. Not yet run: the `git clone` step itself. If a skill fails to
-load, please open an issue.
+What has been verified: the install path, with Claude Code on Linux, at version 0.3.3. All eight
+skills loaded from a project's `.claude/skills/`, and one or all eight loaded from
+`~/.claude/skills/`. `/launch-read`, invoked by name, ran from the project install and from the
+one-skill personal install. In one try, the agent also picked `launch-read` without being named.
+Every change since 0.3.3 is to skill prose and rules only; the file layout and the install steps
+are unchanged, but the install has not been re-run on 0.4.0. Not yet run at any version: the
+`git clone` step itself. If a skill fails to load, please open an issue.
 
 **Codex / GPT agents.** Not yet verified by us. Codex's documentation places personal skills in
 `~/.agents/skills/<skill-name>/` and repository skills in `.agents/skills/`, and requires `name` and

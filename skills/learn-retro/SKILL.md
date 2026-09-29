@@ -2,15 +2,13 @@
 name: learn-retro
 description: "Compare expected vs actual after a launch or planning cycle; extract behavior-changing learnings and a prediction-calibration note. Use 60-90 days post-launch, post-quarter, or after any plan's results are in."
 metadata:
-  version: "0.3.5"
+  version: "0.4.0"
   inspired-by: "right-thing :: plan-prd (fragment-ledger discipline -> quoted expectations)"
 ---
 
 # learn-retro — expected vs actual, honestly
 
-**Output is a file, always.** The deliverable is a written artifact, not a chat reply: the request
-is answered inside the artifact's decision header, the file is saved, and its path is named in the
-closing message. A conversational answer alone is an incomplete run. Put the file in the working directory (or the artifacts directory if one exists) — never inside the inputs. The decision header is the artifact's first section, under the exact heading `## Decision header`, with **Verdict:**, **Confidence:** and **Top 3 actions** labelled as such.
+**Output is always a file:** `<dir>/learn-retro-<slug>.md` (artifacts directory, else working directory; never the input's), path named in the closing message. Refusals write it too; chat alone is an incomplete run. It opens `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**), which alone may answer a quick question, file still written.
 
 ## Inputs
 
@@ -21,10 +19,8 @@ closing message. A conversational answer alone is an incomplete run. Put the fil
 - The agent may fetch the dashboards, exports and account records behind the actuals itself.
   Fetched data counts as evidence only when it carries a cited path or query; uncited fetched
   data is an assumption; data that exists nowhere is a named data pull, never a finding.
-- Persistence: the artifact is the deliverable; its absence is an incomplete run. Never skip the file because the request reads as a conversation. Save the output to `<dir>/learn-retro-<slug>.md` (`<dir>` = the session's
-  working-artifacts directory, or the working directory if none exists; never into the input directory itself); before starting, look in `<dir>` for
-  plan-prd's outcome targets (`plan-prd-*.md`) and plan-direction's predictions
-  (`plan-direction-*.md`).
+- Persistence: before starting, look in `<dir>` for plan-prd's outcome targets (`plan-prd-*.md`) and
+  plan-direction's predictions (`plan-direction-*.md`).
 
 ## Stance
 
@@ -40,58 +36,50 @@ plan, not passes.
    wish it said. Compound expectations ("median load under 800 ms AND no regression on older
    devices") split into separate rows so each clause gets its own delta.
 2. **Actuals table.** Same rows, measured values, each with a named source (dashboard, export,
-   support tags). A number with no named source (input-furnished, or fetched with a cited path
-   or query) is an assumption, never a finding; inventing a datum is never allowed. An unsourced
+   support tags). A number with no named source — furnished in the input, or fetched with a cited
+   path or query — is an assumption, never a finding. An unsourced
    qualitative actual is an anecdote, marked as one.
 3. **Delta per row:** beat | met | missed | unmeasured. Unmeasured is a defect of the plan — the
    retro names which planning choice caused the gap (usually an outcome chain without its
-   measurement deliverable). An expectation the record never addresses is unmeasured — never
-   "met" by inference from framing — and is traced like any other unmeasured row.
+   measurement deliverable). An expectation the record never addresses is unmeasured, not met,
+   and is traced like any other unmeasured row.
 4. **Surprise audit.** The top 3 things that happened that were in no plan row. Unknown unknowns
    are where the next cycle's risk list comes from.
 5. **Learning extraction.** Each learning states a CHANGE, not an observation. "Comms were late" is
    an observation; "launch-comms owner is now named at plan-prd's decision-clock stage" is a
    learning. Each learning has an owner and lands somewhere (a play, a plan item, a policy).
-6. **Calibration note.** What fraction of predictions were right — scoring plan-direction's
-   dated predictions where present? Over-optimism or over-pessimism, named — feeds the
-   confidence levels of future plan-direction memos.
+6. **Calibration note.** State the fraction of predictions that proved right, scoring
+   plan-direction's dated predictions where they exist. Name any over-optimism or
+   over-pessimism; the note feeds the confidence levels of future plan-direction memos.
 7. **Next-cycle feed.** Which learnings change which upcoming decisions, stated as handoffs.
 
 ## Output format
 
-**The artifact is the deliverable, not a chat reply.** If the request reads as a question, the
-decision header is the answer — and the full artifact is still produced and saved to the path below.
-A message in the conversation may summarize it; a summary never replaces it.
-
-Decision header, first — as long as the verdict and its actions need, and no longer: a one-sentence verdict (did the plan land — the
+Decision header, first: a one-sentence verdict (did the plan land — the
 beat / met / missed / unmeasured tally); confidence (high/medium/low) with its basis; the top 3
 actions, each with an owner.
 
 Then: expectation vs actual table (row | expected, quoted | actual + source | delta) -> surprises ->
 learnings (change | owner | lands-where) -> calibration note -> next-cycle handoffs.
-Expectations and actuals may be one merged table with that source column — one table satisfies
-both procedure steps 1-2 and this format.
+Steps 1-2 may share one merged table, provided it keeps the source column.
 
-Budget and overflow: length is a judgement, not a line count. The header runs as long as the
-verdict, its confidence and the top actions need, and then stops — no padding, no restating the
-verdict, no qualifier that changes nothing. If it would grow past that, each action compresses to a
-single clause and any rider (note, caveat, aside) moves to the body. The body carries the argument
-and the evidence; if it is running well past what the work needs, the excess moves to an appendix
-after the header, at the end of the artifact (the old ~1,500-word guide is a useful smell test, not
-a limit to hit). This is how completeness and length coexist: every mandated section is still
-completed — never cut to fit, nothing padded — by keeping its conclusion in the body and moving its
-supporting detail (full tables, ledgers, workings) to the appendix. Material is relocated, never
-dropped.
+Budget and overflow: the header holds only the verdict, its confidence and one-clause actions. Complete every mandated section; when the body runs long, move supporting detail (tables, workings) to an end appendix — relocated, never dropped.
 
-Derived numbers: every number derived from the input — a count, sum, share, percentage, delta or
-rate — is recomputed once from its source before it is published, with the arithmetic shown beside
-it (numerator and denominator, or the formula), and any claim resting on it (meets a target, a
-majority, the largest) asserts no more than that arithmetic shows. In the header, where words are
-capped, the arithmetic may sit at the figure's first statement in the body. Stating a real
-derivation wrongly is a different failure from inventing a datum; both are forbidden.
+Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
 
 ## Anti-patterns
 
 - "We learned a lot" — no behavior change named
 - Actuals without sources; misses softened with narrative ("we basically hit it")
 - Re-arguing decisions with hindsight but no new information
+
+## Micro-example (expectation row + learning)
+
+    | Row | Expected, quoted | Actual + source | Delta |
+    | E-1 | "week-one cancellations among new members ... drop to 17% or less within 45 days of
+      launch" (plan-prd, Outcomes) | 19.0% — 412 / 2,168 new members cancelled in week one,
+      days 1-45 (cohort dashboard) | missed |
+
+    L-1 — change: new-member targets are set per acquisition channel before plan-prd freezes
+    them, because gift signups never saw the new onboarding. Owner: growth PM. Lands in: the
+    outcomes chain of the next onboarding PRD.

@@ -2,15 +2,13 @@
 name: plan-direction
 description: "Weigh 2-4 competing product directions and recommend one: frozen weighted criteria, reasoning-trap audit, reversibility and sequencing, kill criteria. Use when the debate is which bet to make next."
 metadata:
-  version: "0.3.5"
+  version: "0.4.0"
   inspired-by: "RefoundAI/lenny-skills :: evaluating-trade-offs (cost of inaction, named biases, flip question); RefoundAI/lenny-skills :: defining-product-strategy (diagnose the crux, clarity over certainty); pratikshadake/claude-product-management-skills :: tradeoff-articulator (gain/lose/why-now contract); pratikshadake/claude-product-management-skills :: user-segment-prioritizer (criteria-first rubric, rejected options stay visible); kazdenc/builder-skills :: lean-canvas (every box a bet, riskiest assumption first)"
 ---
 
 # plan-direction — weigh competing bets, recommend one
 
-**Output is a file, always.** The deliverable is a written artifact, not a chat reply: the request
-is answered inside the artifact's decision header, the file is saved, and its path is named in the
-closing message. A conversational answer alone is an incomplete run. Put the file in the working directory (or the artifacts directory if one exists) — never inside the inputs. The decision header is the artifact's first section, under the exact heading `## Decision header`, with **Verdict:**, **Confidence:** and **Top 3 actions** labelled as such.
+**Output is always a file:** `<dir>/plan-direction-<slug>.md` (artifacts directory, else working directory; never the input's), path named in the closing message. Refusals write it too; chat alone is an incomplete run. It opens `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**), which alone may answer a quick question, file still written.
 
 ## Inputs
 
@@ -21,9 +19,8 @@ closing message. A conversational answer alone is an incomplete run. Put the fil
 - The agent may fetch the metrics, estimates and prior decision docs behind each option itself.
   Fetched data counts as evidence only when it carries a cited path or query; uncited fetched
   data is an assumption; data that exists nowhere is a named data pull, never a finding.
-- Persistence: the artifact is the deliverable; its absence is an incomplete run. Never skip the file because the request reads as a conversation. Save the output to `<dir>/plan-direction-<slug>.md` (`<dir>` = the session's
-  working-artifacts directory, or the working directory if none exists; never into the input directory itself); before starting, look in `<dir>` for
-  learn-retro's next-cycle handoffs (`learn-retro-*.md`).
+- Persistence: before starting, look in `<dir>` for learn-retro's next-cycle handoffs
+  (`learn-retro-*.md`).
 
 ## Stance
 
@@ -49,6 +46,10 @@ weight change is a logged revision event with a stated reason — never a silent
 
 Scale: score each criterion 1-5; weighted = weight x score / 5 (each column maxes at its weight; totals max 100). State the scale in the memo. All options x all criteria x all scores, visible in one table; rejected options keep their numbers visible. Include deliberate inaction as a row whenever deferring is a live stance in the debate — a bet on hold is an option and is scored like one.
 
+The weighted table structures the debate; it does not settle it. Each 1-5 score is a judgement
+written as a number, so a few points' difference in the totals is noise, and the recommendation
+rests on the evidence and the trap audit, never on the total alone.
+
 ### 4. Run the trap audit
 
 Four probes. Each answered with what was found, or "checked, clean":
@@ -70,40 +71,22 @@ increment that preserves optionality. Weighted totals within 10 points (on the 1
 
 ### 6. Write the memo
 
-**The artifact is the deliverable, not a chat reply.** If the request reads as a question, the
-decision header is the answer — and the full artifact is still produced and saved to the path below.
-A message in the conversation may summarize it; a summary never replaces it.
-
-- Decision header, first — as long as the verdict and its actions need, and no longer: a one-sentence verdict (the recommended direction
+- Decision header, first: a one-sentence verdict (the recommended direction
   or sequence); confidence (high/medium/low) with its basis — which evidence dominates; the top 3
   actions, each with an owner. This header is the memo's verdict; it is not repeated elsewhere.
 - The frozen-criteria score table
 - Gain / Lose / Why-now for the recommended option
 - Reversibility tags + execution sequence (what runs first, what it unblocks)
-- Kill criteria: metric-triggered and dated ("if pilot listening-time lift < X min by <date>, stop and reassess")
+- Kill criteria: metric-triggered and dated ("if pilot listening-time lift is under 2 min/week over the 18-minute baseline by 2027-03-16, stop and reassess")
 - Predictions: 2-4 dated, checkable predictions the recommendation implies (metric + threshold + date), for learn-retro to score.
 - Evidence that would flip this call
 - Trap audit appendix (all four probes, findings)
 - The riskiest assumption behind the recommendation, stated as a testable bet
-- Document order: the decision header opens; crux and frozen criteria follow it (the freeze must be auditable); the rest of the list above is the memo’s contents, not its section order
+- Document order: the decision header opens, then the crux and the frozen criteria (so the freeze is auditable); the other items above may follow in any order
 
-Budget and overflow: length is a judgement, not a line count. The header runs as long as the
-verdict, its confidence and the top actions need, and then stops — no padding, no restating the
-verdict, no qualifier that changes nothing. If it would grow past that, each action compresses to a
-single clause and any rider (note, caveat, aside) moves to the body. The body carries the argument
-and the evidence; if it is running well past what the work needs, the excess moves to an appendix
-after the header, at the end of the artifact (the old ~1,500-word guide is a useful smell test, not
-a limit to hit). This is how completeness and length coexist: every mandated section is still
-completed — never cut to fit, nothing padded — by keeping its conclusion in the body and moving its
-supporting detail (full tables, ledgers, workings) to the appendix. Material is relocated, never
-dropped.
+Budget and overflow: the header holds only the verdict, its confidence and one-clause actions. Complete every mandated section; when the body runs long, move supporting detail (tables, workings) to an end appendix — relocated, never dropped.
 
-Derived numbers: every number derived from the input — a count, sum, share, percentage, delta or
-rate — is recomputed once from its source before it is published, with the arithmetic shown beside
-it (numerator and denominator, or the formula), and any claim resting on it (meets a target, a
-majority, the largest) asserts no more than that arithmetic shows. In the header, where words are
-capped, the arithmetic may sit at the figure's first statement in the body. Stating a real
-derivation wrongly is a different failure from inventing a datum; both are forbidden.
+Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
 
 ## Norm
 
@@ -115,5 +98,6 @@ clear" beats a hedge.
     Verdict: Sequence B then A — ship offline downloads first (~16 weeks, one squad), then open
     the family-plan beta on the steadier app. Confidence: medium — the offline diagnosis rests on
     session and crash logs, not a controlled test.
-    Top actions: (1) staff the offline squad — eng lead; (2) arm the kill criterion (listening-time
-    lift < X min by <date>) — PM; (3) draft the family-plan beta brief for the handoff — PM.
+    Top actions: (1) staff the offline squad — eng lead; (2) arm the kill criterion (pilot
+    listening-time lift < 2 min/week over the 18-minute baseline by 2027-03-16, eight weeks after
+    the ~16-week ship) — PM; (3) draft the family-plan beta brief for the handoff — PM.

@@ -1,6 +1,54 @@
 # Changelog
 
-## 2026-09-27 — all skills at 0.3.5 (first public release)
+Each skill has its own version, set by the `version:` field under `metadata:` in its SKILL.md
+frontmatter. Versions stay below 1.0.0 while a skill is still settling. **1.0.0 will mark the first
+stable release**, once a skill has been through an independent test pass. Nothing has reached 1.0.0
+yet.
+
+## 2026-09-29 — all skills at 0.4.0 (first public release)
+
+This release changes rules, not only wording, so the version moves from 0.3 to 0.4. All eight
+skills and the README now state the same version, 0.4.0.
+
+- **Shorter, plainer skills.** The instructions every skill shares (save the output to a file, open
+  it with the decision header, move long detail to an appendix, recompute every derived number) are
+  now stated once per skill instead of up to three times, and the overflow rule takes two sentences
+  where it took nine. Wording that read like a patch for one past mistake has been rewritten as a
+  plain rule. No shared rule was dropped.
+- **A path for thin data.** When the organization simply does not have a second data source, a
+  dashboard or clean instrumentation — not when nobody looked — three skills now give a usable
+  answer instead of stopping. `plan-prd` writes a narrowed PRD that opens by naming the thin
+  evidence. `learn-triage` can route a severe, widely reported problem to planning with a
+  "provisional" flag. `launch-read` can return go-with-conditions when the main metric can be read
+  on day one by a named stopgap method. Each path says what is missing and what would settle it,
+  with an owner and a date. Where the data exists but was not checked, the old rule still applies.
+- **Experiment arithmetic.** `learn-experiment` now gives the standard sample-size formula for
+  comparing two rates, states its assumptions, and shows a worked example: a 4% baseline and a
+  0.5-point lift, at the usual 5% significance and 80% power, need 25,551 users per group. It tells
+  the agent to compute the number with a short script when it can, and to show every step.
+- **Tests without random assignment.** `learn-experiment` has a new branch for fake-door,
+  concierge and five-user usability tests, with its own pass/fail threshold and a plain list of what
+  such a test can and cannot show. "Don't run the test" is no longer the only answer at low volume.
+- **A refusal is still a deliverable.** Every skill now writes its file under the same decision
+  header when its answer is "stop", "not ready", "don't run" or "not enough evidence". When you
+  explicitly ask a quick question, the reply may be just the decision header, but the file is still
+  written.
+- **Clearer thresholds.** `launch-read` now says when conditions add up to a no-go: one or two
+  ordinary failed checks are conditions, three or more make the verdict no-go. `plan-direction` now
+  says that a few points' difference in its weighted scores is noise, and that the recommendation
+  rests on the evidence, not the total alone.
+- **A short example in every skill.** `launch-read`, `learn-triage`, `learn-retro` and `plan-split`
+  gained one, and the example in `plan-direction` now uses concrete numbers and dates instead of
+  placeholders.
+- **A glossary in the README** for the terms the skills rely on: fragment, evidence, assumption,
+  unknown, named data pull, decision clock, kill criteria, ITT and per-protocol.
+
+## Before the first public release
+
+The revisions below were made before anything was published. They are kept as a record. Where a
+later entry changes a rule, the later entry wins.
+
+### 2026-09-27 — artifact made non-optional, exact header spelling
 
 The artifact became non-optional, and the format contract became exact. Three changes, all of them
 found by running the skills on realistic requests rather than by reading them:
@@ -22,7 +70,7 @@ the strict ~1,500-word body limit are retired, with padding and dropped substanc
 instead of a number (the cap was in direct conflict with the provenance lines the headers also
 require). And the plays now name the exact path in their closing message.
 
-## 2026-09-27 — all skills at 0.3.4
+### 2026-09-27 — length is a judgement, not a line count
 
 Length stopped being a line count. The hard 120-word cap on the decision header is retired, along
 with the strict ~1,500-word body limit: the header now runs as long as the verdict, its confidence
@@ -34,17 +82,11 @@ Why: the cap and the provenance lines the headers also require were in direct co
 pushed headers over in testing. A rule an agent has to break to do the other half of its instruction
 is a defect in the rule, not in the prose.
 
-Scope: prose only. No output format, install path or file layout changed, so the install verification
-on the 0.3.3 text still holds; 0.3.4 is the version the next test pass exercises.
+Scope: prose only. No output format, install path or file layout changed.
 
-Each skill has its own version, set by the `version:` field under `metadata:` in its SKILL.md
-frontmatter.
-Versions stay below 1.0.0 while a skill is still settling. **1.0.0 will mark the first stable
-release**, once a skill has been through an independent test pass. Nothing has reached 1.0.0 yet.
+### 2026-09-27 — credits frontmatter as a single string
 
-## 2026-09-27 — all skills at 0.3.3
-
-Every skill moves from 0.3.2 to 0.3.3. Only the frontmatter changes. No skill's instructions
+Only the frontmatter changes. No skill's instructions
 change, so this is not a behavioural change.
 
 - **Credits.** `inspired-by:` under `metadata:` is now a single quoted string, not a YAML list.
@@ -54,9 +96,9 @@ change, so this is not a behavioural change.
   Second, the Agent Skills spec types every `metadata` value as a string. The wording of each
   credit is unchanged.
 
-## 2026-09-27 — all skills at 0.3.2
+### 2026-09-27 — frontmatter follows the Agent Skills spec
 
-Every skill moves from 0.3.1 to 0.3.2. Only the frontmatter changes. No skill's instructions
+Only the frontmatter changes. No skill's instructions
 change, so this is not a behavioural change.
 
 - **Frontmatter.** `version:` and `inspired-by:` now sit under a `metadata:` map, so each
@@ -65,9 +107,9 @@ change, so this is not a behavioural change.
   skill that has other keys there. `name` and `description` stay at the top level. Credit lines
   and their wording are unchanged.
 
-## 2026-09-27 — all skills at 0.3.1
+### 2026-09-27 — overflow and derived-number rules
 
-Every skill moves from 0.3.0 to 0.3.1. Two rules are added to each skill's output section, and one
+Two rules are added to each skill's output section, and one
 credit line is corrected.
 
 - **Budget and overflow.** The decision header stays at or under 120 words. Before it would go
@@ -86,20 +128,9 @@ credit line is corrected.
   skill in this set. Those `inspired-by:` lines now use the project's current name
   (`right-thing :: <skill>`). Third-party credits are unchanged.
 
-## 2026-09-27 — all skills at 0.3.0
+### 2026-09-27 — shared structure for all eight skills
 
-| Skill | Phase | Version |
-|---|---|---|
-| plan-direction | Plan | 0.3.0 |
-| plan-prd | Plan | 0.3.0 |
-| plan-improve | Plan | 0.3.0 |
-| plan-split | Plan | 0.3.0 |
-| launch-read | Launch | 0.3.0 |
-| learn-retro | Learn | 0.3.0 |
-| learn-experiment | Learn | 0.3.0 |
-| learn-triage | Learn | 0.3.0 |
-
-What 0.3.0 adds to every skill:
+What this revision adds to every skill:
 
 - An **Inputs** section: what the skill needs, how many questions it may ask before it proceeds,
   what the agent may fetch for itself, and when fetched data counts as evidence (only with a
@@ -113,5 +144,4 @@ What 0.3.0 adds to every skill:
 - Examples that are generic and shorter, plus `inspired-by:` credits trimmed to sources that
   were actually read.
 
-Earlier versions (0.1.x–0.2.x) were internal and are not published. 0.3.0 to 0.3.2 were not
-released publicly either. 0.3.5 is the first public release.
+Earlier internal versions were not published. 0.4.0 is the first public release.
