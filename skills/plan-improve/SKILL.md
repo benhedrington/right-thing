@@ -8,7 +8,9 @@ metadata:
 
 # plan-improve — defect list + build-ready rewrite
 
-**Output is always a file:** `<dir>/plan-improve-<slug>.md` (artifacts directory, else working directory; never the input's), path named in the closing message. Refusals write it too; chat alone is an incomplete run. It opens `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**), which alone may answer a quick question, file still written.
+Red-pens an existing PRD: a defect list quoting the text against a 13-item taxonomy, then a build-ready rewrite derived from it.
+
+**Output is always a file:** `<dir>/plan-improve-<slug>.md`, opening `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**); chat alone is an incomplete run.
 
 ## Inputs
 
@@ -37,7 +39,7 @@ Read the PRD once end-to-end, then sweep the full taxonomy below. Every defect i
 
 Verbatim quotes only. A critique that cannot be anchored to text is an opinion.
 
-### The taxonomy — sweep all 11, every time
+### The taxonomy — sweep all 13, every time
 
 One record per distinct quoted span. Multiple instances in one category yield multiple records.
 A span that offends two categories yields two records. Quote distinct substrings so no span is
@@ -55,6 +57,14 @@ counted twice in one category.
 10. fake-non-goals — "Out of scope: TBD" is not a non-goal; real non-goals name what was
     considered and declined
 11. false-completeness — "Open questions: n/a" while unknowns visibly exist in the text
+12. missing-user-definition — no named user or segment: "users" or "customers" with no who, which
+    plan or role, or how many
+13. missing-NFRs — no security, privacy, accessibility or performance requirement where the
+    feature touches one (sign-in or permissions, personal data, a new screen, a latency-sensitive
+    path). "Fast" with no number is vague-requirements; a missing performance line is this.
+
+Where the missing thing leaves no span to quote (12, 13), quote the sentence or heading where it
+should have been — the problem statement, the requirements list.
 
 ### Severity rule — tests, not vibes
 
@@ -75,16 +85,15 @@ If no — must-fix.
 - Every timeline: a capacity basis, or a "no basis stated" flag.
 - Bundled scope: split into separate PRDs, or recommend the split and rewrite the primary PRD to
   cover the core problem only.
+- missing-user-definition gets a Target users and segment section; missing-NFRs a Non-functional
+  requirements line. Each entry is testable or, when the PRD gives no basis, an owned open
+  question — never an invented segment or threshold.
 
 ## Output contract
 
 Decision header, first: a one-sentence verdict (build-ready,
 needs-revision, or not-a-PRD, with the must-fix count); confidence (high/medium/low) with its
 basis; the top 3 actions, each with an owner.
-
-Budget and overflow: the header holds only the verdict, its confidence and one-clause actions. Complete every mandated section; when the body runs long, move supporting detail (tables, workings) to an end appendix — relocated, never dropped.
-
-Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
 
 Output 1 — numbered defect list; each record is a compact block, one field per line (id |
 taxonomy | quote | severity | what-fixed-looks-like). The verdict closes the defect-list section:
@@ -104,3 +113,15 @@ the rewrite (split recommendations, notes) is Pass-2 scaffolding, labeled as suc
     must-fix
     "Early churn: week-one cancellations among new members (23% baseline, June cohort report)
     drop to 17% or less within 45 days of launch, measured by the cohort dashboard."
+
+## Rules that always apply
+
+Output file: `<dir>` is the artifacts directory, else the working directory, never the input's; name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+
+Owners: every owner is a role ("growth PM", "eng lead") or a person the user supplied; never guess a person's name. An owner the run cannot know is recorded as "unnamed — must be named", so no header assigns work to someone who never agreed to it.
+
+Budget and overflow: the header holds only the verdict, its confidence and one-clause actions. Complete every mandated section; when the body runs long, move supporting detail (tables, workings) to an end appendix — relocated, never dropped.
+
+Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
+
+Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it.

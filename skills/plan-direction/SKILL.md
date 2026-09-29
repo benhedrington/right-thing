@@ -8,14 +8,17 @@ metadata:
 
 # plan-direction — weigh competing bets, recommend one
 
-**Output is always a file:** `<dir>/plan-direction-<slug>.md` (artifacts directory, else working directory; never the input's), path named in the closing message. Refusals write it too; chat alone is an incomplete run. It opens `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**), which alone may answer a quick question, file still written.
+Weighs 2-4 competing product directions on weighted criteria, audits the reasoning for traps, and recommends one with kill criteria.
+
+**Output is always a file:** `<dir>/plan-direction-<slug>.md`, opening `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**); chat alone is an incomplete run.
 
 ## Inputs
 
 - Required: 2-4 competing directions plus the context that makes the choice live — the goal,
   capacity, and constraints.
 - Missing pieces: ask at most 3 questions, then proceed on stated assumptions. If the input is
-  already a complete dossier, proceed with zero questions.
+  already a complete dossier, proceed with zero questions. When the user supplied no criteria,
+  one of the 3 confirms the derived criteria (step 2).
 - The agent may fetch the metrics, estimates and prior decision docs behind each option itself.
   Fetched data counts as evidence only when it carries a cited path or query; uncited fetched
   data is an assumption; data that exists nowhere is a named data pull, never a finding.
@@ -24,9 +27,9 @@ metadata:
 
 ## Stance
 
-Direction debates are won by reasoning quality, not by the loudest narrator. This play freezes the
-criteria before looking at the options, audits the reasoning for named traps, and treats every
-direction as a bet with a price, a reversal cost, and a kill switch.
+Direction debates are won by reasoning quality, not by the loudest narrator. This skill fixes the
+criteria before scoring the options and records who set them, audits the reasoning for named
+traps, and treats every direction as a bet with a price, a reversal cost, and a kill switch.
 
 ## Procedure
 
@@ -39,8 +42,17 @@ the criteria. If the crux cannot be stated, the decision is not ripe — say so 
 ### 2. Freeze the criteria BEFORE scoring options
 
 3-5 weighted criteria, each tied to the crux (e.g., listening-time impact 45, time-to-signal 25,
-team fit 15, reversibility 15 — weights sum to 100). Write them down before any option is examined. Any later
-weight change is a logged revision event with a stated reason — never a silent drift.
+team fit 15, reversibility 15 — weights sum to 100). The options sit in the same prompt, so the
+freeze is an audit trail, not a claim of blindness:
+
+- The user supplied criteria and weights: use them as given.
+- Otherwise: derive them from the crux, show them, and spend one question confirming them before
+  any option is scored.
+- No question left, or no answer: proceed on the derived criteria, and the confidence basis says
+  the user never saw them.
+
+The memo records the provenance: supplied, confirmed, or never seen by the user. Once scoring
+starts, any weight change is a logged revision event with a stated reason — never a silent drift.
 
 ### 3. Score every option
 
@@ -74,19 +86,16 @@ increment that preserves optionality. Weighted totals within 10 points (on the 1
 - Decision header, first: a one-sentence verdict (the recommended direction
   or sequence); confidence (high/medium/low) with its basis — which evidence dominates; the top 3
   actions, each with an owner. This header is the memo's verdict; it is not repeated elsewhere.
-- The frozen-criteria score table
+- The frozen-criteria score table, with the criteria's provenance: supplied, confirmed, or never
+  seen by the user
 - Gain / Lose / Why-now for the recommended option
 - Reversibility tags + execution sequence (what runs first, what it unblocks)
 - Kill criteria: metric-triggered and dated ("if pilot listening-time lift is under 2 min/week over the 18-minute baseline by 2027-03-16, stop and reassess")
 - Predictions: 2-4 dated, checkable predictions the recommendation implies (metric + threshold + date), for learn-retro to score.
 - Evidence that would flip this call
 - Trap audit appendix (all four probes, findings)
-- The riskiest assumption behind the recommendation, stated as a testable bet
+- The riskiest assumption behind the recommendation, stated as a testable bet — plan-prd carries it into its open questions, with the kill criteria into its outcomes
 - Document order: the decision header opens, then the crux and the frozen criteria (so the freeze is auditable); the other items above may follow in any order
-
-Budget and overflow: the header holds only the verdict, its confidence and one-clause actions. Complete every mandated section; when the body runs long, move supporting detail (tables, workings) to an end appendix — relocated, never dropped.
-
-Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
 
 ## Norm
 
@@ -97,7 +106,19 @@ clear" beats a hedge.
 
     Verdict: Sequence B then A — ship offline downloads first (~16 weeks, one squad), then open
     the family-plan beta on the steadier app. Confidence: medium — the offline diagnosis rests on
-    session and crash logs, not a controlled test.
+    session and crash logs, not a controlled test; criteria confirmed by the user.
     Top actions: (1) staff the offline squad — eng lead; (2) arm the kill criterion (pilot
     listening-time lift < 2 min/week over the 18-minute baseline by 2027-03-16, eight weeks after
     the ~16-week ship) — PM; (3) draft the family-plan beta brief for the handoff — PM.
+
+## Rules that always apply
+
+Output file: `<dir>` is the artifacts directory, else the working directory, never the input's; name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+
+Owners: every owner is a role ("growth PM", "eng lead") or a person the user supplied; never guess a person's name. An owner the run cannot know is recorded as "unnamed — must be named", so no header assigns work to someone who never agreed to it.
+
+Budget and overflow: the header holds only the verdict, its confidence and one-clause actions. Complete every mandated section; when the body runs long, move supporting detail (tables, workings) to an end appendix — relocated, never dropped.
+
+Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
+
+Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it.

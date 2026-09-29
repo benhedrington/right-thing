@@ -68,7 +68,7 @@ found by running the skills on realistic requests rather than by reading them:
 Also in this revision: **length is a judgement, not a line count** — the hard 120-word header cap and
 the strict ~1,500-word body limit are retired, with padding and dropped substance as the failures
 instead of a number (the cap was in direct conflict with the provenance lines the headers also
-require). And the plays now name the exact path in their closing message.
+require). And the skills now name the exact path in their closing message.
 
 ### 2026-09-27 — length is a judgement, not a line count
 
@@ -140,7 +140,7 @@ What this revision adds to every skill:
 - A soft length cap of about 1,500 words unless the user asks for more depth. Required
   sections are never cut to fit.
 - **Persistence**: output is saved to a file, and each skill looks for upstream outputs so the
-  plays chain.
+  skills chain.
 - Examples that are generic and shorter, plus `inspired-by:` credits trimmed to sources that
   were actually read.
 

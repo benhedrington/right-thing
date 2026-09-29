@@ -8,7 +8,9 @@ metadata:
 
 # learn-triage — feedback dump to routed signal
 
-**Output is always a file:** `<dir>/learn-triage-<slug>.md` (artifacts directory, else working directory; never the input's), path named in the closing message. Refusals write it too; chat alone is an incomplete run. It opens `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**), which alone may answer a quick question, file still written.
+Turns a raw feedback dump into weighted, verified clusters, each routed: fix-now, to-plan, to-experiment, to-relationship or dismiss.
+
+**Output is always a file:** `<dir>/learn-triage-<slug>.md`, opening `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**); chat alone is an incomplete run.
 
 ## Inputs
 
@@ -19,7 +21,10 @@ metadata:
 - The agent may fetch support tags, usage, and churn data itself. Fetched data counts as evidence
   only when it carries a cited path or query; uncited fetched data is an assumption; data that
   exists nowhere is a named data pull, never a finding.
-- Persistence: this play has no upstream artifact to look for in `<dir>`; its input is raw dumps.
+- Persistence: the input is raw dumps. Before starting, look in `<dir>` for earlier
+  `learn-triage-*.md` (their weight scale is reused, step 3) and, optionally, launch-read's
+  predicted top-5 inbound questions (`launch-read-*.md`), which after a launch are what this
+  dump should be checked against (step 2).
 
 ## Stance
 
@@ -37,7 +42,14 @@ ledger stays auditable. Praise is signal about what to protect, never about what
    night" may be one wish wearing two costumes. A cluster lists its member IDs. Merging on costume
    is a flag, not a fusion. If the member pains differ (admin-side workflow pain vs end-user
    friction), the merged cluster carries separate promotion rules per pain.
+   If a launch-read artifact was found, match each predicted inbound question to the clusters:
+   predicted and seen, predicted and absent, or seen but unpredicted. An unpredicted cluster of
+   weight is a support-readiness gap for the next launch-read.
 3. **Weight clusters:** frequency x source diversity x severity (revenue/retention impact).
+   Default scale: frequency = member items; diversity = distinct source channels; severity 1-3
+   (1 = annoyance, 2 = blocks a task or costs time or money, 3 = cancellation or churn named).
+   Reuse the scale of any earlier `learn-triage-*.md` in `<dir>` so weights compare across runs;
+   the user may override it, and an override is stated beside the scale it replaces.
    State the scale and units used and show the arithmetic per cluster, so the number is auditable
    — not authoritative. One loud account repeating itself is a stake, not a signal — repetition by
    one source adds no diversity. Cranky members ride IN a cluster but add nothing to frequency,
@@ -75,18 +87,17 @@ Decision header, first: a one-sentence verdict (the cluster that matters most
 and where it routes); confidence (high/medium/low) with its basis; the top 3 actions, each with an
 owner.
 
-Then the signal memo: top clusters (members, weight, verification result, route, owner) -> trap
-findings -> the full ledger.
-
-Budget and overflow: the header holds only the verdict, its confidence and one-clause actions. Complete every mandated section; when the body runs long, move supporting detail (tables, workings) to an end appendix — relocated, never dropped.
-
-Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
+Then the signal memo: the weight scale and where it came from (default, reused from a named
+earlier run, or user override) -> top clusters (members, weight, verification result, route,
+owner) -> predicted-question check (when a launch-read artifact was found) -> trap findings ->
+the full ledger.
 
 ## Anti-patterns
 
 - Feature-vote theater: transcribe, count, obey
 - Averaging severity across sources; the crank's 10/10 swamping nine 3/10s
 - Silence read as satisfaction
+- A fresh scale every run, so "this cluster grew" cannot be said
 
 ## Micro-example (one cluster, weighted)
 
@@ -99,3 +110,15 @@ Derived numbers: recompute every derived number from its source and show the ari
     Weight = 5 x 3 x 3 = 45
     Verified: 38% of sessions opened offline end within a minute — 4,902 / 12,900
       (session-log export, saved query offline-sessions-aug). Route: to-plan.
+
+## Rules that always apply
+
+Output file: `<dir>` is the artifacts directory, else the working directory, never the input's; name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+
+Owners: every owner is a role ("growth PM", "eng lead") or a person the user supplied; never guess a person's name. An owner the run cannot know is recorded as "unnamed — must be named", so no header assigns work to someone who never agreed to it.
+
+Budget and overflow: the header holds only the verdict, its confidence and one-clause actions. Complete every mandated section; when the body runs long, move supporting detail (tables, workings) to an end appendix — relocated, never dropped.
+
+Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
+
+Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it.

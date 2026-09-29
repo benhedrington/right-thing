@@ -1,18 +1,31 @@
 # right-thing
 
-**[superpowers](https://github.com/obra/superpowers) teaches your coding agent to build it right.
-right-thing teaches it to build the right thing — and to learn whether it did.**
+**Eight skills that make an AI agent do product-management work the way a strong PM would: PRDs
+anchored in evidence, launch go/no-go audits, feedback triage, experiment design and honest
+retros.**
 
-Eight skills for the product-management side of agent work: **Plan, Launch, Learn.** Build is
-deliberately missing — your build harness owns that. Nothing here depends on superpowers, and
-superpowers does not depend on this. Each works without the other.
+For agent builders: [superpowers](https://github.com/obra/superpowers) teaches your coding agent
+to build it right; right-thing teaches it to build the right thing, and to learn whether it did.
+Neither depends on the other.
 
-> **Status: early.** These are version 0.4.0. So far they have been tried only on our own sample
-> inputs, and we have not yet checked how they behave when the input is genuinely sound, so a
-> cautious verdict (no-go, needs-revision, a discovery note instead of a PRD) may be over-cautious.
-> Expect changes. Treat the output as a first draft a good PM would review, not a finished
-> document — nothing here is claimed as proven or production-ready, and 1.0.0 will mark the first
-> version we consider stable.
+## Try it first
+
+1. Install `plan-improve` (see [Install](#install)), then type `/plan-improve` and paste a PRD.
+2. You get a severity-rated defect list, each defect quoting the PRD, plus a build-ready rewrite.
+3. Both are saved to one file, `plan-improve-<slug>.md`, and the agent tells you its path.
+
+## What a run produces
+
+Every skill's file opens with the same short decision header, so the answer comes first. This is
+the shape (invented content):
+
+    ## Decision header
+    **Verdict:** needs-revision — 4 must-fixes; the bulk-export PRD has no success metric.
+    **Confidence:** medium — the pain is quoted from 6 support tickets, the size is not measured.
+    **Top 3 actions:** (1) add a baseline export-time metric — PM; (2) date the two open
+    questions — PM; (3) re-scope the scheduling add-on into its own PRD — PM.
+
+The full defect list, tables and workings follow below the header.
 
 ## The skills
 
@@ -20,30 +33,71 @@ superpowers does not depend on this. Each works without the other.
 
 | Skill | What it does |
 |---|---|
-| `plan-direction` | Weighs 2-4 competing directions and recommends one: frozen criteria, reasoning-trap audit, reversibility, kill criteria, dated predictions. |
-| `plan-prd` | Turns messy real-world input (sales notes, stakeholder asks, call summaries) into a problem-anchored PRD with cited requirements. |
-| `plan-improve` | Red-pens an existing PRD: a quoted, severity-rated defect list plus a build-ready rewrite. |
-| `plan-split` | Slices a PRD into epics and stories with testable acceptance criteria, dependency edges, and traceability. |
+| `plan-direction` — direction choice | Weighs 2-4 competing directions and recommends one: frozen criteria, reasoning-trap audit, reversibility, kill criteria, dated predictions. |
+| `plan-prd` — PRD writing | Turns messy real-world input (sales notes, stakeholder asks, call summaries) into a problem-anchored PRD with cited requirements. |
+| `plan-improve` — PRD review | Red-pens an existing PRD: a quoted, severity-rated defect list plus a build-ready rewrite. |
+| `plan-split` — story breakdown | Slices a PRD into epics and stories with testable acceptance criteria, dependency edges, and traceability. |
 
 ### Launch — before it ships
 
 | Skill | What it does |
 |---|---|
-| `launch-read` | Pre-ship audit: seven evidence checks, ending in go, go-with-conditions, or no-go. |
+| `launch-read` — launch readiness | Pre-ship audit: seven evidence checks, ending in go, go-with-conditions, or no-go. |
 
 ### Learn — after it ships
 
 | Skill | What it does |
 |---|---|
-| `learn-retro` | Compares expected vs. actual with quoted expectations, draws learnings that change behavior, and checks how well past predictions held up. |
-| `learn-experiment` | Turns a falsifiable hypothesis into a pre-registered experiment card: decision rule first, arithmetic shown, guardrails, stop conditions. |
-| `learn-triage` | Turns a feedback dump into a ledger, pain clusters, verification, and routing (fix-now / to-plan / to-experiment / to-relationship / dismiss). |
+| `learn-retro` — retrospective | Compares expected vs. actual with quoted expectations, draws learnings that change behavior, and checks how well past predictions held up. |
+| `learn-experiment` — experiment design | Turns a falsifiable hypothesis into a pre-registered experiment card: decision rule first, arithmetic shown, guardrails, stop conditions. |
+| `learn-triage` — feedback triage | Turns a feedback dump into a ledger, pain clusters, verification, and routing (fix-now / to-plan / to-experiment / to-relationship / dismiss). |
 
-Each skill opens its output with a short decision header (verdict, confidence, top three actions
-with owners) and saves the result to a file, so the next skill in the loop can pick it up.
+> **Status: early, version 0.4.0.** So far these have been tried only on our own sample inputs,
+> not yet on genuinely sound ones, so a cautious verdict (no-go, needs-revision) may be over-cautious.
+> Treat the output as a strong first draft for a good PM to review, not a finished document.
+> Expect changes; 1.0.0 will mark the first version we consider stable.
+
+## The loop, and where the files go
+
+The skills are built to run in this order, each one picking up the last one's file:
+
+learn-triage → plan-prd → plan-improve → plan-split → launch-read → learn-retro →
+plan-direction → plan-prd
+
+Each file is saved to the session's artifacts directory if the agent has one, else the working
+directory. Before starting, each skill looks there for what came before it:
+
+- `plan-prd` reads learn-triage's to-plan clusters.
+- `plan-improve` reads an existing PRD, often plan-prd's.
+- `plan-split` reads plan-prd's PRD or plan-improve's rewrite.
+- `launch-read` reads plan-prd and plan-split, and kill criteria from plan-prd or plan-direction.
+- `learn-retro` reads plan-prd's outcome targets and plan-direction's predictions.
+- `plan-direction` reads learn-retro's handoffs to the next cycle.
+- `learn-experiment` reads learn-triage's to-experiment clusters.
+
+The last step back to `plan-prd` is yours: take the chosen direction into a new PRD. **Run the
+skills in one folder.** That shared folder is what makes the loop work.
+
+## What the skills need
+
+- **File writes.** Every run saves its result to a file. Without a filesystem the run still
+  answers in chat, but the handoff to the next skill is lost.
+- **Fetching a cited source.** The skills can fetch the dashboards, exports and docs your input
+  points to. Without that, anything not pasted in becomes a named data pull for you to run.
+- **A shell,** for `learn-experiment`'s sample-size arithmetic. Without one, the card still shows
+  every step of the arithmetic by hand, for you to check.
+
+**Your data.** The skills invite pasting customer feedback, sales notes and account records: strip
+personal data first, or follow your company's AI data policy.
 
 ## Words the skills use
 
+- **Decision header:** the short block every output opens with: the verdict, how confident it
+  is and why, and the top three actions with owners.
+- **Go-with-conditions:** a launch verdict meaning "ship, if these named conditions are met by
+  these dates", each with an owner and what happens if the date passes.
+- **Provisional:** a feedback cluster sent on to planning even though the data to verify it does
+  not exist yet. It says what is missing and what would settle it.
 - **Fragment:** one line of the input (a quote or short paraphrase) with its source, so later
   sections can point back to it.
 - **Evidence:** a claim that comes from a named source someone else could check.
@@ -81,18 +135,17 @@ For one project only, use that project's `.claude/skills/` as the destination in
 with `mkdir -p` first). Then type a skill's name as a command, such as `/launch-read`, followed by
 your input, or describe the task and let the agent pick the skill.
 
-What has been verified: the install path, with Claude Code on Linux, at version 0.3.3. All eight
-skills loaded from a project's `.claude/skills/`, and one or all eight loaded from
-`~/.claude/skills/`. `/launch-read`, invoked by name, ran from the project install and from the
-one-skill personal install. In one try, the agent also picked `launch-read` without being named.
-Every change since 0.3.3 is to skill prose and rules only; the file layout and the install steps
-are unchanged, but the install has not been re-run on 0.4.0. Not yet run at any version: the
-`git clone` step itself. If a skill fails to load, please open an issue.
+The copy-and-load install was verified with Claude Code on Linux at version 0.3.3 (the `git clone`
+step itself was not run); the file layout has not changed since. If a skill fails to load, please open an issue.
 
 **Codex / GPT agents.** Not yet verified by us. Codex's documentation places personal skills in
 `~/.agents/skills/<skill-name>/` and repository skills in `.agents/skills/`, and requires `name` and
 `description` in the frontmatter — ours have both. We have not run an install on a Codex machine, so
 treat that path as documented, not tested. This section stays provisional until we have.
+
+**Using these in a chat app.** Not yet verified by us. Where a chat app supports custom skills,
+upload the skill's folder (often as a zip), or paste the contents of its `SKILL.md` where the app
+accepts instructions. We have not tried this in any chat app, so treat it as untested.
 
 ## Credits
 

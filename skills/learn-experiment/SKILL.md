@@ -8,7 +8,9 @@ metadata:
 
 # learn-experiment — belief to tested decision
 
-**Output is always a file:** `<dir>/learn-experiment-<slug>.md` (artifacts directory, else working directory; never the input's), path named in the closing message. Refusals write it too; chat alone is an incomplete run. It opens `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**), which alone may answer a quick question, file still written.
+Turns a belief into a pre-registered experiment card: hypothesis, decision rule, sample size, guardrails and stop conditions.
+
+**Output is always a file:** `<dir>/learn-experiment-<slug>.md`, opening `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**); chat alone is an incomplete run.
 
 ## Inputs
 
@@ -35,25 +37,47 @@ edits after data starts are logged as revisions.
 1. **Hypothesis, falsifiable:** "We believe [change] will move [metric] by [size] because
    [mechanism]." No mechanism, no hypothesis — return to the drawing board.
 2. **Decision rule FIRST:** what result ships it, kills it, or iterates — numeric thresholds set
-   before any data. A test with no decision rule is a demo with extra steps.
-3. **Method:** control vs variant; assignment (randomized? cohort? geo?); exposure definition —
-   who is in, when they enter, when they count. State ITT or per-protocol. An ITT denominator
-   counts every assigned unit, including undelivered and unopened ones.
+   before any data. A test with no decision rule is a demo with extra steps. The rule reads ONE
+   primary metric, named before data; every other metric is a guardrail or a secondary metric
+   (reported, never decided on). If the user insists on several primary metrics, or on several
+   variants (A/B/n, each compared with control), divide alpha by the number of comparisons
+   (Bonferroni) and carry that alpha into the arithmetic.
+3. **Method:** control vs variant(s); assignment (randomized? cohort? geo?) and the planned split;
+   exposure definition — who is in, when they enter, when they count. State ITT or per-protocol.
+   An ITT denominator counts every assigned unit, including undelivered and unopened ones.
 4. **Arithmetic.** Baseline rate, minimum detectable effect, available volume, runtime: the test
    must be ABLE to detect the claimed effect within the window. If the numbers say it cannot,
-   redesign — bigger effect, longer window, more volume, the non-randomized branch below, or don't
-   run the test. Show the math, including the conventions (power, alpha, baseline) — numbers
-   without conventions are not arithmetic.
+   redesign — bigger effect, longer window, more volume, fewer variants, the non-randomized branch
+   below, or don't run the test. Show the math, including the conventions (power, alpha,
+   baseline) — numbers without conventions are not arithmetic.
    For a conversion-rate metric use the two-proportion sample size, per arm:
 
        n = ( z_a * sqrt(2 * pbar * (1 - pbar)) + z_b * sqrt(p1*(1 - p1) + p2*(1 - p2)) )^2 / (p2 - p1)^2
        p1 = baseline, p2 = baseline + MDE, pbar = (p1 + p2) / 2,
        z_a = 1.96 (alpha 0.05, two-sided), z_b = 0.8416 (power 0.8); round n up
 
+   With a Bonferroni alpha, z_a changes: three comparisons give alpha 0.05 / 3 = 0.0167 and
+   z_a = 2.394 (two-sided).
+
+   For a mean metric per randomized unit (revenue per user, minutes per subscriber), per arm:
+
+       n = 2 * (z_a + z_b)^2 * sigma^2 / delta^2
+       sigma = the metric's standard deviation per unit, from a pre-period of the same population
+       delta = the MDE in the metric's units; round n up
+
+   sigma is a required input: without a sourced sigma there is no n, only a named data pull.
+   Illustrative: sigma 30 minutes, delta 2 minutes -> 2 * 2.8016^2 * 900 / 4 = 2 * 7.84896 *
+   900 / 4 = 3,532.03 -> n = 3,533 per arm. A ratio whose denominator is not the randomized unit
+   (minutes per session when users are randomized) needs the delta method: compute it with a
+   script and state its inputs (per-unit means, variances and covariance of numerator and
+   denominator).
+
    Assumptions: a two-sided test, equal arms, independent units, and the same metric definition
-   in both arms. When any fails (unequal split, clustered units, a ratio or mean metric), say so
-   and use the matching formula. Where a shell is available, compute n with a short script;
-   either way, the card shows the inputs and each step, and runtime = 2n / eligible units per day.
+   in both arms. When any fails (unequal split, clustered units), say so and use the matching
+   formula. Where a shell is available, compute n with a short script; either way, the card shows
+   the inputs and each step, and runtime = (number of arms x n) / eligible units per day, rounded
+   up to whole weeks (at least one): run whole weeks so weekly cycles fall evenly in every arm,
+   even when n is reached sooner.
 
    Worked example: baseline 4%, MDE +0.5 pp, alpha 0.05, power 0.8.
    p1 = 0.04, p2 = 0.045, pbar = 0.0425.
@@ -62,9 +86,13 @@ edits after data starts are logged as revisions.
    0.8416 * 0.285263 = 0.240077.
    (0.559158 + 0.240077)^2 = 0.799235^2 = 0.638777; 0.638777 / 0.005^2 = 0.638777 / 0.000025
    = 25,551.1 -> n = 25,551 per arm, 51,102 in total. At an illustrative 2,000 eligible users a
-   day that is a 26-day runtime (51,102 / 2,000 = 25.6, rounded up).
+   day that is 26 days (51,102 / 2,000 = 25.6, rounded up), run as 4 whole weeks (28 days).
 5. **Guardrails.** Metrics that must not degrade, with thresholds — success on the target metric
    while a guardrail breaks is a kill, not a win. Include the adjacent surfaces the change touches.
+   The first guardrail is the sample-ratio check: before any result is read, compare the observed
+   arm counts with the planned split. For two arms on a 50/50 plan, chi-square = (n_A - n_B)^2 /
+   (n_A + n_B); above 10.83 (p < 0.001) is a mismatch. A mismatch means assignment or logging is
+   broken: read no result, find the cause, and rerun or repair before any decision.
 6. **Attribution honesty.** What else changes in the window (seasonality, campaigns, other
    launches); how confounds are handled; what would make the read untrustworthy.
 7. **Stop conditions.** Early-stop rules and their triggers, dated — anchored to a stated Day 0
@@ -93,15 +121,26 @@ randomized or non-randomized — can the arithmetic detect the claimed effect, o
 non-randomized test establish?); confidence (high/medium/low) with its basis; the top 3 actions,
 each with an owner.
 
-Then the experiment card: hypothesis | decision rule | method | arithmetic (shown) | guardrails | stop conditions |
-runtime | owner | analysis plan (metrics, cuts, what each result means).
-
-Budget and overflow: the header holds only the verdict, its confidence and one-clause actions. Complete every mandated section; when the body runs long, move supporting detail (tables, workings) to an end appendix — relocated, never dropped.
-
-Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
+Then the experiment card: hypothesis | decision rule (primary metric named) | method | arithmetic
+(shown) | guardrails | stop conditions | runtime (whole weeks) | owner | analysis plan
+(sample-ratio check first, then metrics, cuts, what each result means). learn-retro scores the
+decision rule and plan-prd ledgers a ship result, so write both to be quoted.
 
 ## Anti-patterns
 
 - "Let's A/B it" with no decision rule; peeking without stop rules
 - Testing effects the arithmetic cannot detect at available volume
 - Declaring victory without reading guardrails; post-hoc metric shopping
+- Reading a result before the sample-ratio check; stopping mid-week because n arrived early
+
+## Rules that always apply
+
+Output file: `<dir>` is the artifacts directory, else the working directory, never the input's; name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+
+Owners: every owner is a role ("growth PM", "eng lead") or a person the user supplied; never guess a person's name. An owner the run cannot know is recorded as "unnamed — must be named", so no header assigns work to someone who never agreed to it.
+
+Budget and overflow: the header holds only the verdict, its confidence and one-clause actions. Complete every mandated section; when the body runs long, move supporting detail (tables, workings) to an end appendix — relocated, never dropped.
+
+Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
+
+Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it.

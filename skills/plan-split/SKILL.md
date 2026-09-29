@@ -8,7 +8,9 @@ metadata:
 
 # plan-split — PRD to epics and stories
 
-**Output is always a file:** `<dir>/plan-split-<slug>.md` (artifacts directory, else working directory; never the input's), path named in the closing message. Refusals write it too; chat alone is an incomplete run. It opens `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**), which alone may answer a quick question, file still written.
+Slices a testable PRD into outcome epics and stories with pass/fail acceptance criteria, dependency edges and traceability back to the evidence.
+
+**Output is always a file:** `<dir>/plan-split-<slug>.md`, opening `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**); chat alone is an incomplete run.
 
 ## Inputs
 
@@ -81,10 +83,6 @@ The PRD's fragment citations ride along — a reviewer can walk story -> require
 7. Conditional requirements: condition, gate, and what the epic looks like both ways (when any exist)
 8. Open questions (owned + dated)
 
-Budget and overflow: the header holds only the verdict, its confidence and one-clause actions. Complete every mandated section; when the body runs long, move supporting detail (tables, workings) to an end appendix — relocated, never dropped.
-
-Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
-
 ## Anti-patterns
 
 - Component epics; stories without demos; criteria that restate the story title
@@ -102,3 +100,15 @@ Derived numbers: recompute every derived number from its source and show the ari
       list shows no flag. | EXT-1 | re-runs of an unchanged commit (27% baseline, F06) |
 
     S2.2 (clear the flag after the test passes 20 consecutive runs) is blocked-by S2.1.
+
+## Rules that always apply
+
+Output file: `<dir>` is the artifacts directory, else the working directory, never the input's; name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+
+Owners: every owner is a role ("growth PM", "eng lead") or a person the user supplied; never guess a person's name. An owner the run cannot know is recorded as "unnamed — must be named", so no header assigns work to someone who never agreed to it.
+
+Budget and overflow: the header holds only the verdict, its confidence and one-clause actions. Complete every mandated section; when the body runs long, move supporting detail (tables, workings) to an end appendix — relocated, never dropped.
+
+Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
+
+Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it.
