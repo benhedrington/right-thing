@@ -12,15 +12,17 @@ Neither depends on the other.
 
 1. Install `plan-improve` (see [Install](#install)), then type `/plan-improve` and paste a PRD.
 2. You get a severity-rated defect list, each defect quoting the PRD, plus a build-ready rewrite.
-3. Both are saved to one file, `plan-improve-<slug>.md`, and the agent tells you its path.
+3. Both are saved to one file, `plan-improve-<slug>-YYYY-MM-DD.md`, and the agent tells you its
+   path.
 
 ## What a run produces
 
-Every skill's file opens with the same short decision header, so the answer comes first. This is
-the shape (invented content):
+Every skill's file opens with a short decision header of the same shape, so the answer comes
+first. This is `plan-improve`'s (invented content):
 
     ## Decision header
     **Verdict:** needs-revision — 4 must-fixes; the bulk-export PRD has no success metric.
+    **Top must-fixes:** no success metric; two open questions undated; scheduling bundled in.
     **Confidence:** medium — the pain is quoted from 6 support tickets, the size is not measured.
     **Top 3 actions:** (1) add a baseline export-time metric — PM; (2) date the two open
     questions — PM; (3) re-scope the scheduling add-on into its own PRD — PM.
@@ -52,11 +54,11 @@ The full defect list, tables and workings follow below the header.
 | `learn-experiment` — experiment design | Turns a falsifiable hypothesis into a pre-registered experiment card: decision rule first, arithmetic shown, guardrails, stop conditions. |
 | `learn-triage` — feedback triage | Turns a feedback dump into a ledger, pain clusters, verification, and routing (fix-now / to-plan / to-experiment / to-relationship / dismiss). |
 
-> **Status: early, version 0.4.0.** We ran each skill blind on one deliberately strong input,
-> written by the same team that wrote the skills. `plan-prd`, `plan-split`, `plan-direction` and
-> `learn-retro` gave the expected verdicts; `plan-improve` and `learn-triage` still lean cautious,
-> so push back on a verdict that seems too harsh. The runs also caught real errors in the inputs
-> themselves, which is what the skills are for.
+> **Status: early, version 0.4.0.** We ran each skill blind on a deliberately strong input,
+> written by the same team that wrote the skills. Most gave the expected verdict. `plan-improve`
+> and `learn-triage` leaned cautious and were recalibrated; on re-test they returned
+> build-ready-with-fixes and to-plan (pending pull). If a verdict seems too harsh, push back. The
+> runs also caught real errors in the inputs themselves, which is what the skills are for.
 > Treat the output as a strong first draft for a good PM to review, not a finished document.
 > Expect changes; 1.0.0 will mark the first version we consider stable.
 
@@ -69,8 +71,8 @@ plan-direction → plan-prd
 
 with a side branch for tests: learn-triage → learn-experiment → plan-prd / learn-retro.
 
-Each file is saved to the session's artifacts directory if the agent has one, else the working
-directory. Before starting, each skill looks there for what came before it:
+Each file is saved to the working directory, unless you or the agent's harness name another.
+Before starting, each skill looks there for what came before it:
 
 - `plan-prd` reads learn-triage's to-plan clusters, plan-direction's chosen direction (with its
   riskiest assumption and kill criteria), and learn-experiment's ship results.
@@ -89,9 +91,9 @@ chosen direction without you carrying it over.
 
 **Run each initiative in its own folder.** The shared folder is what makes the loop work, and a
 folder per initiative keeps one product's PRD from being built on another product's triage memo.
-If a folder holds more than one file from the same skill, the right one is the most recent file
-whose topic matches your input; the skills do not yet choose between several on their own, so name
-the file you mean, and check that the output names the file it used.
+If a folder holds more than one file from the same skill, each skill uses the most recent one
+whose topic matches your input, names the file it used, and asks you when more than one fits. A
+re-run never overwrites an earlier file: the date is in the name.
 
 **What to forward.** The full file is a working document. The decision header, and the shareable
 version when you ask for one, is what you send on.
@@ -116,6 +118,8 @@ personal data first, or follow your company's AI data policy.
   these dates", each with an owner and what happens if the date passes.
 - **Provisional:** a feedback cluster sent on to planning even though the data to verify it does
   not exist yet. It says what is missing and what would settle it.
+- **Pending pull:** a feedback cluster sent on to planning while the data to verify it exists but
+  has not been checked yet. The pull, its owner and its date are the gate.
 - **Fragment:** one line of the input (a quote or short paraphrase) with its source, so later
   sections can point back to it.
 - **Evidence:** a claim that comes from a named source someone else could check.
