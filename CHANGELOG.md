@@ -114,4 +114,4 @@ What 0.3.0 adds to every skill:
   were actually read.
 
 Earlier versions (0.1.x–0.2.x) were internal and are not published. 0.3.0 to 0.3.2 were not
-released publicly either; 0.3.3 is the first public release.
+released publicly either. 0.3.5 is the first public release.
