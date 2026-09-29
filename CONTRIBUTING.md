@@ -56,7 +56,7 @@ A reproducible failure on your own input is the evidence we want.
 
 If a change borrows an idea from someone else's work, add it to the skill's `inspired-by:`
 frontmatter and to [CREDITS.md](CREDITS.md). Credit the idea; don't paste the text. We don't
-vendor third-party skills.
+copy third-party skills into this repo.
 
 By contributing, you agree that your contribution is licensed under the repository's MIT
 license.

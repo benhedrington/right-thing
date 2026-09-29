@@ -52,31 +52,49 @@ The full defect list, tables and workings follow below the header.
 | `learn-experiment` — experiment design | Turns a falsifiable hypothesis into a pre-registered experiment card: decision rule first, arithmetic shown, guardrails, stop conditions. |
 | `learn-triage` — feedback triage | Turns a feedback dump into a ledger, pain clusters, verification, and routing (fix-now / to-plan / to-experiment / to-relationship / dismiss). |
 
-> **Status: early, version 0.4.0.** So far these have been tried only on our own sample inputs,
-> not yet on genuinely sound ones, so a cautious verdict (no-go, needs-revision) may be over-cautious.
+> **Status: early, version 0.4.0.** We ran each skill blind on one deliberately strong input,
+> written by the same team that wrote the skills. `plan-prd`, `plan-split`, `plan-direction` and
+> `learn-retro` gave the expected verdicts; `plan-improve` and `learn-triage` still lean cautious,
+> so push back on a verdict that seems too harsh. The runs also caught real errors in the inputs
+> themselves, which is what the skills are for.
 > Treat the output as a strong first draft for a good PM to review, not a finished document.
 > Expect changes; 1.0.0 will mark the first version we consider stable.
 
 ## The loop, and where the files go
 
-The skills are built to run in this order, each one picking up the last one's file:
+The skills are built to run in this order, each one picking up the earlier ones' files:
 
 learn-triage → plan-prd → plan-improve → plan-split → launch-read → learn-retro →
 plan-direction → plan-prd
 
+with a side branch for tests: learn-triage → learn-experiment → plan-prd / learn-retro.
+
 Each file is saved to the session's artifacts directory if the agent has one, else the working
 directory. Before starting, each skill looks there for what came before it:
 
-- `plan-prd` reads learn-triage's to-plan clusters.
+- `plan-prd` reads learn-triage's to-plan clusters, plan-direction's chosen direction (with its
+  riskiest assumption and kill criteria), and learn-experiment's ship results.
 - `plan-improve` reads an existing PRD, often plan-prd's.
 - `plan-split` reads plan-prd's PRD or plan-improve's rewrite.
 - `launch-read` reads plan-prd and plan-split, and kill criteria from plan-prd or plan-direction.
-- `learn-retro` reads plan-prd's outcome targets and plan-direction's predictions.
+- `learn-retro` reads plan-prd's outcome targets, plan-direction's predictions, and
+  learn-experiment's decision rules and guardrails.
 - `plan-direction` reads learn-retro's handoffs to the next cycle.
 - `learn-experiment` reads learn-triage's to-experiment clusters.
+- `learn-triage` reads earlier triage runs (to reuse their weight scale) and launch-read's
+  predicted inbound questions.
 
-The last step back to `plan-prd` is yours: take the chosen direction into a new PRD. **Run the
-skills in one folder.** That shared folder is what makes the loop work.
+The loop closes on its own: `plan-prd` reads the direction memo, so a new PRD starts from the
+chosen direction without you carrying it over.
+
+**Run each initiative in its own folder.** The shared folder is what makes the loop work, and a
+folder per initiative keeps one product's PRD from being built on another product's triage memo.
+If a folder holds more than one file from the same skill, the right one is the most recent file
+whose topic matches your input; the skills do not yet choose between several on their own, so name
+the file you mean, and check that the output names the file it used.
+
+**What to forward.** The full file is a working document. The decision header, and the shareable
+version when you ask for one, is what you send on.
 
 ## What the skills need
 

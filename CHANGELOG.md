@@ -40,8 +40,53 @@ skills and the README now state the same version, 0.4.0.
 - **A short example in every skill.** `launch-read`, `learn-triage`, `learn-retro` and `plan-split`
   gained one, and the example in `plan-direction` now uses concrete numbers and dates instead of
   placeholders.
+- **Launch tiers and a kill switch.** `launch-read` first names the launch tier (a flagged ramp to
+  a small share of users, a beta, or general availability), and the tier decides which checks apply
+  in full. A feature-flag kill switch now counts as a rollback plan, once it has been tested. Widening a ramp to
+  everyone is a new audit.
+- **Sturdier experiments.** `learn-experiment` checks for a sample-ratio mismatch (the groups came
+  out a different size than planned) before any result is read, gives guidance for tests with more
+  than one variant and for average metrics such as revenue per user, and runs every test for whole
+  weeks so weekday and weekend fall evenly in each group.
+- **One rule for owners, in all eight skills.** Every owner is a role or a person you named; the
+  skills never guess a name, and an owner they cannot know is marked "unnamed — must be named".
+- **More of the loop is automatic.** `plan-prd` now reads the chosen direction from
+  `plan-direction` and ship results from `learn-experiment`; `learn-retro` reads the experiment's
+  decision rules and guardrails; `learn-triage` reads the questions `launch-read` predicted
+  customers would ask.
+- **A shareable version.** Ask for one and you get the same document without the working ledger
+  and appendices, sources kept as footnotes, still opening with the decision header.
+- **A fuller PRD review.** `plan-improve` now checks every PRD against 13 kinds of defect, including
+  missing non-functional requirements.
+- **A default weight scale for triage.** `learn-triage` weights clusters on a stated default scale
+  unless an earlier run's scale or yours applies, so weights compare across runs.
+- **A fuller PRD.** `plan-prd`'s PRD now names its target users, lists non-functional requirements
+  (security, privacy, accessibility, performance) and says how the build rolls out.
 - **A glossary in the README** for the terms the skills rely on: fragment, evidence, assumption,
   unknown, named data pull, decision clock, kill criteria, ITT and per-protocol.
+
+- **A verdict between perfect and needs-revision.** `plan-improve` now separates a defect where two
+  competent engineers would build different things (must-fix) from a term or a wording that a
+  practitioner reads the same way (a nit or an open question), groups repeated instances of one root
+  cause into a single record, and adds **build-ready-with-fixes** for a PRD whose fixes are local —
+  each one fixable without rethinking the problem, the users or the scope. The header carries the few
+  must-fixes that matter and the rest move to an appendix. On a deliberately strong PRD this took the
+  count from 25 must-fixes to 9, and the output from 4,300 words to 3,200.
+- **A route that says "plan this, pending a one-day pull".** `learn-triage` adds
+  **to-plan (pending pull)** for a severe, widely reported problem whose verifying data exists but
+  was never checked. The named data pull, its owner and its date stay the gate, exactly as for the
+  provisional route; only the label a reader sees changed. The rules also now say plainly whether one
+  account repeating itself counts toward a cluster's weight, so a loud account cannot inflate it.
+- **Files find each other predictably.** Every skill now says which upstream file it uses (the most
+  recent one matching the topic, named in the output, asking if two plausibly match), never
+  overwrites an earlier run (the date goes in the filename, or a `-2` suffix with a note), and writes
+  to the working directory unless the user or the harness names another.
+- **Smaller fixes.** `plan-direction`'s ten-point tiebreak now reads as a consideration rather than a
+  rule, next to the sentence saying a few points' difference is noise. `plan-split` accepts the
+  team's own story format — points, or "As a…" stories — as long as the acceptance criteria and the
+  dependency edges stay. `learn-experiment` says the minimum detectable effect is set from the
+  business case before volume is known and is never back-solved from the sample at hand, and says
+  what to do when there is no shell: name it as a data pull for an analyst, with the inputs it needs.
 
 ## Before the first public release
 

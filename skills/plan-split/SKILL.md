@@ -10,7 +10,7 @@ metadata:
 
 Slices a testable PRD into outcome epics and stories with pass/fail acceptance criteria, dependency edges and traceability back to the evidence.
 
-**Output is always a file:** `<dir>/plan-split-<slug>.md`, opening `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**); chat alone is an incomplete run.
+**Output is always a file:** `<dir>/plan-split-<slug>-YYYY-MM-DD.md`, opening `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**); chat alone is an incomplete run.
 
 ## Inputs
 
@@ -45,6 +45,8 @@ PRD, never by silent stretching.
 
 ### 2. Slice each epic into stories
 Job-story format: "When [situation], I want to [motivation], so I can [expected outcome]."
+If the team uses "As a…" user stories or points, use their format and keep the acceptance criteria
+and the dependency edges.
 Walking-skeleton first: the first story of each epic is the thinnest end-to-end slice that demos
 the outcome — plumbing-only stories come after something demoable exists.
 
@@ -103,7 +105,9 @@ The PRD's fragment citations ride along — a reviewer can walk story -> require
 
 ## Rules that always apply
 
-Output file: `<dir>` is the artifacts directory, else the working directory, never the input's; name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+Output file: `<dir>` is the working directory, unless the user or harness names another; never the input's own directory. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+
+Files between skills: when reading another run's file, use the most recent one whose topic matches the input and name the file used in the body; if more than one plausibly matches, ask — it counts toward the question budget. Never overwrite: the filename carries the date (`<skill>-<slug>-YYYY-MM-DD.md`); if today's file already exists, add `-2` (then `-3`) and say so in the body. Never silently replace an earlier run's file.
 
 Owners: every owner is a role ("growth PM", "eng lead") or a person the user supplied; never guess a person's name. An owner the run cannot know is recorded as "unnamed — must be named", so no header assigns work to someone who never agreed to it.
 

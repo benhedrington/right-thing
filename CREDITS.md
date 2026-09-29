@@ -2,7 +2,7 @@
 
 The eight skills in this repository are original work. While designing them, we studied
 open-source skill collections by other authors, and some of the skills' structure came from
-ideas in those collections. Those ideas are **credited, not vendored**: no file, section, or
+ideas in those collections. Those ideas are **credited, not copied**: no file, section, or
 passage from these sources is copied into this repository.
 
 **Third-party skill collections are not redistributed here.** To read the originals, go to

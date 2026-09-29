@@ -10,7 +10,7 @@ metadata:
 
 Turns a raw feedback dump into weighted, verified clusters, each routed: fix-now, to-plan, to-experiment, to-relationship or dismiss.
 
-**Output is always a file:** `<dir>/learn-triage-<slug>.md`, opening `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**); chat alone is an incomplete run.
+**Output is always a file:** `<dir>/learn-triage-<slug>-YYYY-MM-DD.md`, opening `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**); chat alone is an incomplete run.
 
 ## Inputs
 
@@ -46,35 +46,45 @@ ledger stays auditable. Praise is signal about what to protect, never about what
    predicted and seen, predicted and absent, or seen but unpredicted. An unpredicted cluster of
    weight is a support-readiness gap for the next launch-read.
 3. **Weight clusters:** frequency x source diversity x severity (revenue/retention impact).
-   Default scale: frequency = member items; diversity = distinct source channels; severity 1-3
+   Default scale: frequency = distinct reporters (one account's or person's repeats count once);
+   diversity = distinct source channels; severity 1-3
    (1 = annoyance, 2 = blocks a task or costs time or money, 3 = cancellation or churn named).
    Reuse the scale of any earlier `learn-triage-*.md` in `<dir>` so weights compare across runs;
    the user may override it, and an override is stated beside the scale it replaces.
    State the scale and units used and show the arithmetic per cluster, so the number is auditable
    — not authoritative. One loud account repeating itself is a stake, not a signal — repetition by
-   one source adds no diversity. Cranky members ride IN a cluster but add nothing to frequency,
-   diversity, or severity — the cluster must stand on its other sources.
+   one source adds no diversity and no frequency: its repeats ride in the cluster and count once,
+   so a loud account cannot inflate a cluster's weight. Cranky members ride IN a cluster but add
+   nothing to frequency, diversity, or severity — the cluster must stand on its other sources.
 4. **Verify top clusters against data** before routing: support tags, usage, churn data.
    Verification uses only data furnished in the input or fetched with a cited path or query;
    anything else is a named data pull, never a verification result. Inventing a verification
    datum is the cardinal sin. A cluster that cannot be checked against any data is marked UNVERIFIED, routes
    to-experiment (or a named data pull), and carries an explicit promotion rule: to-plan stays
-   reserved for verified problems — frequency alone never promotes.
+   reserved for verified problems, save the two flagged routes below — frequency alone never
+   promotes.
+   **Data that exists but was not checked:** a cluster with 3 or more distinct source channels
+   and top-band severity, whose verifying data exists in the org but was not checked, routes
+   `to-plan (pending pull)`, not to-experiment: plan it, pending the pull. The gate is the same as
+   for provisional — the named data pull, its owner and its date; the pull's result upgrades it
+   to to-plan or sends it back to to-experiment; until then plan-prd reads it as it reads
+   provisional (below). Below that bar, an unchecked cluster is UNVERIFIED as above.
    **Working with thin data:** when the verifying data does not exist in the org at all (no
    support tags, no usage instrumentation, no churn records; not merely unfetched), a cluster
    with 3 or more distinct source channels and top-band severity routes to-plan with an explicit
    "provisional" flag, not to-experiment. The flag states plainly what is missing and names what
    would settle it: the data pull or instrument that upgrades it to to-plan or sends it back to
    to-experiment, with an owner and a date. plan-prd takes the reports as evidence that people
-   report the pain; its size stays an assumption. Data that exists but was not checked is still a
-   named data pull.
+   report the pain; its size stays an assumption. The two flags split on one question — does the
+   data exist? Not in the org: provisional. Exists, unchecked: pending pull.
 5. **Route each cluster:**
    - fix-now (bug — severity + owner). A bug routes fix-now regardless of which cluster its pain
      rides in; split it out with a one-line rationale.
    - to-plan (verified problem — feeds plan-prd's evidence ledger; "to-plan (provisional)" only
-     under the thin-data rule in step 4)
-   - to-experiment (uncertain — feeds learn-experiment; an unverified cluster starts here with a
-     named data pull, not in to-plan)
+     under the thin-data rule in step 4, "to-plan (pending pull)" only under its unchecked-data
+     rule)
+   - to-experiment (uncertain — feeds learn-experiment; an unverified cluster below the
+     three-channel, top-band bar starts here with a named data pull, not in to-plan)
    - to-relationship (account-specific — an owner, not a roadmap)
    - dismiss (with reason)
 6. **Trap sweep:** solution-wishes recorded as demands; praise treated as build guidance; a
@@ -102,18 +112,21 @@ the full ledger.
 ## Micro-example (one cluster, weighted)
 
     C-1 "Can't listen without signal" — T-03, T-07, T-11, T-12, T-19, T-24
-    Scale: frequency = items; diversity = distinct source channels; severity 1-3 (3 = cancellation named)
-    Frequency 5 — T-24 is noise (crank): it rides in the cluster and adds nothing
-    Diversity 3 — support tickets (T-03, T-11), one account's sales notes (T-07, T-12),
-      app-store review (T-19); T-12 repeats T-07's account and adds no diversity
+    Scale: frequency = distinct reporters; diversity = distinct source channels; severity 1-3 (3 = cancellation named)
+    Frequency 4 — T-03, T-07, T-11, T-19; T-12 repeats T-07's account and counts once;
+      T-24 is noise (crank): it rides in the cluster and adds nothing
+    Diversity 3 — support tickets (T-03, T-11, two accounts), one account's sales notes
+      (T-07, T-12), app-store review (T-19); T-12 adds no diversity either
     Severity 3 — T-19: "cancelling before my next flight"
-    Weight = 5 x 3 x 3 = 45
+    Weight = 4 x 3 x 3 = 36
     Verified: 38% of sessions opened offline end within a minute — 4,902 / 12,900
       (session-log export, saved query offline-sessions-aug). Route: to-plan.
 
 ## Rules that always apply
 
-Output file: `<dir>` is the artifacts directory, else the working directory, never the input's; name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+Output file: `<dir>` is the working directory, unless the user or harness names another; never the input's own directory. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+
+Files between skills: when reading another run's file, use the most recent one whose topic matches the input and name the file used in the body; if more than one plausibly matches, ask — it counts toward the question budget. Never overwrite: the filename carries the date (`<skill>-<slug>-YYYY-MM-DD.md`); if today's file already exists, add `-2` (then `-3`) and say so in the body. Never silently replace an earlier run's file.
 
 Owners: every owner is a role ("growth PM", "eng lead") or a person the user supplied; never guess a person's name. An owner the run cannot know is recorded as "unnamed — must be named", so no header assigns work to someone who never agreed to it.
 

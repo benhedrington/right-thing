@@ -8,9 +8,9 @@ metadata:
 
 # plan-improve — defect list + build-ready rewrite
 
-Red-pens an existing PRD: a defect list quoting the text against a 13-item taxonomy, then a build-ready rewrite derived from it.
+Red-pens an existing PRD: a quoted defect list against a 13-item taxonomy, then a build-ready rewrite derived from it.
 
-**Output is always a file:** `<dir>/plan-improve-<slug>.md`, opening `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**); chat alone is an incomplete run.
+**Output is always a file:** `<dir>/plan-improve-<slug>-YYYY-MM-DD.md`, opening `## Decision header` (**Verdict:**, **Top must-fixes:**, **Confidence:**, **Top 3 actions**); chat alone is an incomplete run.
 
 ## Inputs
 
@@ -29,21 +29,27 @@ An existing PRD of unknown quality gets two outputs, in strict order: the defect
 rewrite second. The rewrite is derived from the critique — never written around it, never
 written before it.
 
+A strong PRD should come back with few must-fixes. If you find more than about eight, check each
+one against the severity test before recording it.
+
 ## Procedure
 
 ### Pass 1 — the defect list (COMPLETE before any rewriting)
 
 Read the PRD once end-to-end, then sweep the full taxonomy below. Every defect is a record:
 
-    D-n | taxonomy name | verbatim quote from the original | must-fix or nit | what-fixed-looks-like (one line)
+    D-n | taxonomy name | verbatim quote(s) from the original | must-fix or nit | what-fixed-looks-like (one line)
 
 Verbatim quotes only. A critique that cannot be anchored to text is an opinion.
 
+One record per root cause. Spans that fail for the same reason — the same undefined term, the same
+unscoped rule — go in one record carrying several quotes, each verbatim, so the count is of
+distinct problems, not distinct spans.
+
 ### The taxonomy — sweep all 13, every time
 
-One record per distinct quoted span. Multiple instances in one category yield multiple records.
-A span that offends two categories yields two records. Quote distinct substrings so no span is
-counted twice in one category.
+Distinct root causes in one category yield separate records; repeats of one cause share a record.
+A span that offends two categories yields two records. No span is quoted twice in one category.
 
 1. weak-problem-framing — solution-first or adjectives-as-problem; no user behavior cited
 2. unmeasurable-success — "satisfaction goes up"; goals without baseline, target, or timeframe
@@ -68,10 +74,11 @@ should have been — the problem statement, the requirements list.
 
 ### Severity rule — tests, not vibes
 
-must-fix = the defect blocks a testable requirement, a measurable goal, or an honest scope
-statement. nit = style, wording, missing exemplar detail.
-Tiebreaker question: could an engineer, given only this PRD, build it and know they are done?
-If no — must-fix.
+must-fix = two competent engineers, given only this PRD, would build different things, or no one
+could say whether the goal was met. Everything else is a nit: style, wording, missing exemplar
+detail. A term a practitioner in the domain would read the same way is a nit, or at most an open
+question — not a must-fix. An unanswered question is not a must-fix unless its answer changes
+what gets built or how success is judged.
 
 ### Pass 2 — the rewrite
 
@@ -91,16 +98,24 @@ If no — must-fix.
 
 ## Output contract
 
-Decision header, first: a one-sentence verdict (build-ready,
-needs-revision, or not-a-PRD, with the must-fix count); confidence (high/medium/low) with its
-basis; the top 3 actions, each with an owner.
+Decision header, first: a one-sentence verdict (one of the four below, with the must-fix
+count); the top 3-5 must-fixes (all, if fewer) by D-number, one clause each, most consequential first;
+confidence (high/medium/low) with its basis; the top 3 actions, each with an owner.
 
 Output 1 — numbered defect list; each record is a compact block, one field per line (id |
-taxonomy | quote | severity | what-fixed-looks-like). The verdict closes the defect-list section:
-build-ready | needs-revision | not-a-PRD.
-- needs-revision is a verdict on the input PRD. The must-fixes are applied in the rewrite, and
-  residual risk is named there.
-- not-a-PRD means the rewrite is not attempted; explain why.
+taxonomy | quote(s) | severity | what-fixed-looks-like). The body carries the headline
+must-fixes named in the header; every other record goes to the end appendix, same D-numbers —
+relocated, never dropped. The verdict closes the defect-list section:
+- build-ready — no must-fixes.
+- build-ready-with-fixes — every must-fix is local: fixing it edits the quoted requirement,
+  metric or term and leaves the problem statement, the target users and the in/out-of-scope
+  list unchanged.
+- needs-revision — at least one must-fix cannot be fixed without changing the problem statement,
+  the target users or the scope. One such must-fix decides it, whatever the count.
+- not-a-PRD — the rewrite is not attempted; explain why.
+
+Verdicts judge the input PRD. Under build-ready-with-fixes and needs-revision the rewrite applies
+every must-fix and names the residual risk.
 
 Output 2 — the rewritten PRD, standalone and self-contained. Everything between the verdict and
 the rewrite (split recommendations, notes) is Pass-2 scaffolding, labeled as such.
@@ -116,11 +131,13 @@ the rewrite (split recommendations, notes) is Pass-2 scaffolding, labeled as suc
 
 ## Rules that always apply
 
-Output file: `<dir>` is the artifacts directory, else the working directory, never the input's; name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+Output file: `<dir>` is the working directory, unless the user or harness names another; never the input's own directory. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+
+Files between skills: when reading another run's file, use the most recent one whose topic matches the input and name the file used in the body; if more than one plausibly matches, ask — it counts toward the question budget. Never overwrite: the filename carries the date (`<skill>-<slug>-YYYY-MM-DD.md`); if today's file already exists, add `-2` (then `-3`) and say so in the body. Never silently replace an earlier run's file.
 
 Owners: every owner is a role ("growth PM", "eng lead") or a person the user supplied; never guess a person's name. An owner the run cannot know is recorded as "unnamed — must be named", so no header assigns work to someone who never agreed to it.
 
-Budget and overflow: the header holds only the verdict, its confidence and one-clause actions. Complete every mandated section; when the body runs long, move supporting detail (tables, workings) to an end appendix — relocated, never dropped.
+Budget and overflow: the header holds only the verdict, the top must-fixes, the confidence and one-clause actions. Complete every mandated section; when the body runs long, move supporting detail (tables, workings) to an end appendix — relocated, never dropped.
 
 Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
 

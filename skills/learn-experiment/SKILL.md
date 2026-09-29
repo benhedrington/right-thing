@@ -10,7 +10,7 @@ metadata:
 
 Turns a belief into a pre-registered experiment card: hypothesis, decision rule, sample size, guardrails and stop conditions.
 
-**Output is always a file:** `<dir>/learn-experiment-<slug>.md`, opening `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**); chat alone is an incomplete run.
+**Output is always a file:** `<dir>/learn-experiment-<slug>-YYYY-MM-DD.md`, opening `## Decision header` (**Verdict:**, **Confidence:**, **Top 3 actions**); chat alone is an incomplete run.
 
 ## Inputs
 
@@ -50,6 +50,8 @@ edits after data starts are logged as revisions.
    redesign — bigger effect, longer window, more volume, fewer variants, the non-randomized branch
    below, or don't run the test. Show the math, including the conventions (power, alpha,
    baseline) — numbers without conventions are not arithmetic.
+   The MDE is the smallest effect worth shipping for, set from the business case before looking
+   at volume; never back-solved from the sample you have.
    For a conversion-rate metric use the two-proportion sample size, per arm:
 
        n = ( z_a * sqrt(2 * pbar * (1 - pbar)) + z_b * sqrt(p1*(1 - p1) + p2*(1 - p2)) )^2 / (p2 - p1)^2
@@ -70,7 +72,9 @@ edits after data starts are logged as revisions.
    900 / 4 = 3,532.03 -> n = 3,533 per arm. A ratio whose denominator is not the randomized unit
    (minutes per session when users are randomized) needs the delta method: compute it with a
    script and state its inputs (per-unit means, variances and covariance of numerator and
-   denominator).
+   denominator). With no shell, a ratio or mean metric's computation is named as a data pull for
+   an analyst, with the inputs it needs: sigma from the pre-period and delta for a mean; those
+   per-unit moments for a ratio.
 
    Assumptions: a two-sided test, equal arms, independent units, and the same metric definition
    in both arms. When any fails (unequal split, clustered units), say so and use the matching
@@ -135,7 +139,9 @@ decision rule and plan-prd ledgers a ship result, so write both to be quoted.
 
 ## Rules that always apply
 
-Output file: `<dir>` is the artifacts directory, else the working directory, never the input's; name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+Output file: `<dir>` is the working directory, unless the user or harness names another; never the input's own directory. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+
+Files between skills: when reading another run's file, use the most recent one whose topic matches the input and name the file used in the body; if more than one plausibly matches, ask — it counts toward the question budget. Never overwrite: the filename carries the date (`<skill>-<slug>-YYYY-MM-DD.md`); if today's file already exists, add `-2` (then `-3`) and say so in the body. Never silently replace an earlier run's file.
 
 Owners: every owner is a role ("growth PM", "eng lead") or a person the user supplied; never guess a person's name. An owner the run cannot know is recorded as "unnamed — must be named", so no header assigns work to someone who never agreed to it.
 
