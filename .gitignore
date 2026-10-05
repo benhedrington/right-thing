@@ -15,3 +15,6 @@ Thumbs.db
 *.swp
 *~
 
+
+# Built skill zips (attached to GitHub Releases, not committed)
+dist/

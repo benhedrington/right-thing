@@ -2,7 +2,7 @@
 name: learn-retro
 description: "Compare expected vs actual after a launch or planning cycle; extract behavior-changing learnings and a prediction-calibration note. Use 60-90 days post-launch, post-quarter, or after any plan's results are in."
 metadata:
-  version: "0.5.0"
+  version: "0.5.1"
   inspired-by: "see CREDITS.md"
 ---
 
@@ -96,9 +96,9 @@ Steps 1-2 may share one merged table, provided it keeps the source column.
 
 ## Rules that always apply
 
-Output file: `<dir>` is the working directory, unless the user or harness names another; never the folder the input file sits in unless the user or harness named that folder. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+Output file: `<dir>` is the working directory, unless the user or harness names another; never the folder the input file sits in unless the user or harness named that folder. Name the file in the closing message; where files do not persist between sessions (a chat app), add one line telling the user to save it where the next skill can find it, such as the project's files. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
 
-Files between skills: when reading another run's file, use the most recent one whose topic matches the input and name the file used in the body; if more than one plausibly matches, ask — it counts toward the question budget. Never overwrite: the filename carries the date (`<skill>-<slug>-YYYY-MM-DD.md`); if today's file already exists, add `-2` (then `-3`) and say so in the body. Never silently replace an earlier run's file.
+Files between skills: another run's file may be in `<dir>`, attached by the user, or in the project's files; look in all that exist. When this skill's inputs say to read an upstream file and none is found, ask the user once whether one exists to attach — it counts toward the question budget — then proceed without it and say so. When reading another run's file, use the most recent one whose topic matches the input and name the file used in the body; if more than one plausibly matches, ask — it counts toward the question budget. Never overwrite: the filename carries the date (`<skill>-<slug>-YYYY-MM-DD.md`); if today's file already exists, add `-2` (then `-3`) and say so in the body. Never silently replace an earlier run's file.
 
 Owners: every owner is a role ("growth PM", "eng lead") or a person the user supplied; never guess a person's name. An owner the run cannot know is recorded as "unnamed — must be named", so no header assigns work to someone who never agreed to it.
 

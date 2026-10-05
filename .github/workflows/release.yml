@@ -1,0 +1,21 @@
+# On a version tag (v0.5.1), build the skill zips and attach them to a GitHub Release.
+name: release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build skill zips
+        run: scripts/build-skill-zips.sh
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/*.zip \
+            --title "$GITHUB_REF_NAME" \
+            --notes "Skill zips for Claude (Settings > Customize > Skills > upload). Upload one zip per skill. What changed: see CHANGELOG.md."

@@ -5,12 +5,21 @@ frontmatter. Versions stay below 1.0.0 while a skill is still settling. **1.0.0 
 stable release**, once a skill has been through an independent test pass. Nothing has reached 1.0.0
 yet.
 
-## 2026-10-05 — plan-improve 0.5.1 (plainer description)
+## 2026-10-05 — all skills at 0.5.1 (ready for the Claude app)
 
-- `plan-improve`'s description now says "Review an existing PRD and fix it" instead of "Red-pen",
-  which is an editor's term many PMs don't use. The description is how Claude decides when to use
-  the skill, so it should match how people ask: "review my PRD", "check this draft". It also names
-  draft PRDs, in line with the README's which-skill table. No rule changed.
+- **Handoffs across chats.** In the Claude app each chat starts empty, so a skill could not see
+  the files earlier skills wrote. Every skill now looks for earlier files in the working folder,
+  in files the user attached, and in the project's files. When it expects one and finds none, it
+  asks once whether there is one to attach, then proceeds without it and says so. Where files do
+  not persist, the closing message tells the user to save the output where the next skill can
+  find it.
+- **Zips for upload.** Each GitHub release now carries one zip per skill, built automatically
+  from the tagged version, for **Settings > Customize > Skills** in Claude. The README has a
+  Claude app install section and recommends one Claude Project per initiative.
+- **Plainer description.** `plan-improve`'s description now says "Review an existing PRD and fix
+  it" instead of "Red-pen", an editor's term many PMs don't use. The description is how Claude
+  decides when to use the skill, so it should match how people ask: "review my PRD", "check this
+  draft".
 
 ## 2026-10-05 — all skills at 0.5.0 (field test by two simulated PMs)
 

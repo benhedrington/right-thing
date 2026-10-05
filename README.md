@@ -69,7 +69,7 @@ Start from where you are. You don't have to run the skills in order.
 | `learn-experiment` — experiment design | Turns a falsifiable hypothesis into a pre-registered experiment card: decision rule first, arithmetic shown, guardrails, stop conditions. |
 | `learn-triage` — feedback triage | Turns a feedback dump into a ledger, pain clusters, verification, and routing (fix-now / to-plan / to-experiment / to-relationship / dismiss). |
 
-> **Status: early, version 0.5.0.** We ran each skill blind on a deliberately strong input,
+> **Status: early, version 0.5.1.** We ran each skill blind on a deliberately strong input,
 > written by the same team that wrote the skills. Most gave the expected verdict. `plan-improve`
 > and `learn-triage` leaned cautious and were recalibrated; on re-test they returned
 > build-ready-with-fixes and to-plan (pending pull). If a verdict seems too harsh, push back. The
@@ -123,7 +123,9 @@ version when you ask for one, is what you send on.
 ## What the skills need
 
 - **File writes.** Every run saves its result to a file. Without a filesystem the run still
-  answers in chat, but the handoff to the next skill is lost.
+  answers in chat, but the handoff to the next skill is lost. In the Claude app, the file is a
+  download; keep it in the initiative's project (see [Install](#install)) so the next skill can
+  read it.
 - **Fetching a cited source.** The skills can fetch the dashboards, exports and docs your input
   points to. Without that, anything not pasted in becomes a named data pull for you to run.
 - **A shell,** for `learn-experiment`'s sample-size arithmetic. Without one, the card still shows
@@ -187,9 +189,24 @@ step itself was not run); the file layout has not changed since. If a skill fail
 `description` in the frontmatter — ours have both. We have not run an install on a Codex machine, so
 treat that path as documented, not tested. This section stays provisional until we have.
 
-**Using these in a chat app.** Not yet verified by us. Where a chat app supports custom skills,
-upload the skill's folder (often as a zip), or paste the contents of its `SKILL.md` where the app
-accepts instructions. We have not tried this in any chat app, so treat it as untested.
+**Claude (web and desktop app).** Download the zip for each skill you want from the
+[latest release](https://github.com/benhedrington/right-thing/releases/latest), one zip per
+skill. In Claude, go to **Settings > Customize > Skills** and upload each zip. Code execution
+must be turned on. An organization owner can upload them once for the whole team, so nobody has
+to install them individually. Skills turned on in Claude also load in Claude Code when you sign in
+with the same account. To use one, ask in plain words ("review my draft PRD") or type its name as
+a command, such as `/plan-improve`. We have not yet run a full install-and-use pass in the Claude
+app, so treat this route as documented, not tested.
+
+**Working across chats in the Claude app.** Each new chat starts empty, so a skill cannot see the
+files earlier chats produced unless you give them to it. Use one **Claude Project per
+initiative** and add each skill's output file to that project's files when the run finishes; the
+next skill, in any chat in that project, reads it from there. Without a project, attach the
+earlier file to the chat. When a skill expects an earlier file and finds none, it asks once
+whether you have one to attach.
+
+**Other chat apps.** Not yet verified by us. Where an app supports custom skills, upload the same
+zip, or paste the contents of `SKILL.md` where the app accepts instructions.
 
 ## Credits
 
