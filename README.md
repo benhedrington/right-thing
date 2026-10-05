@@ -29,6 +29,21 @@ first. This is `plan-improve`'s (invented content):
 
 The full defect list, tables and workings follow below the header.
 
+## Which skill do I need?
+
+Start from where you are. You don't have to run the skills in order.
+
+| You have… | Run |
+|---|---|
+| Messy notes, stakeholder asks or feedback, and no PRD yet | `plan-prd` |
+| A draft PRD, yours or someone else's | `plan-improve` |
+| Two to four competing options, and a debate about which to back | `plan-direction` |
+| A PRD that engineering needs to start building | `plan-split` |
+| A belief you want to test before building, or a ramp that is the test | `learn-experiment` |
+| A release about to ship | `launch-read` |
+| A pile of feedback, reviews or tickets | `learn-triage` |
+| Results in, 60-90 days after launch or at quarter end | `learn-retro` |
+
 ## The skills
 
 ### Plan — before the build
@@ -64,7 +79,8 @@ The full defect list, tables and workings follow below the header.
 
 ## The loop, and where the files go
 
-The skills are built to run in this order, each one picking up the earlier ones' files:
+When you do run several, they hand off to each other in this order, each one picking up the
+earlier ones' files:
 
 learn-triage → plan-prd → plan-improve → plan-split → launch-read → learn-retro →
 plan-direction → plan-prd
