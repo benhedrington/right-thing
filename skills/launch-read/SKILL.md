@@ -2,7 +2,7 @@
 name: launch-read
 description: "Pre-ship audit of a feature or product: instrument check, criteria sweep, risk and support readiness, open-question audit. Outputs go / go-with-conditions / no-go. Use before GA or a major release."
 metadata:
-  version: "0.4.0"
+  version: "0.5.0"
   inspired-by: "see CREDITS.md"
 ---
 
@@ -23,8 +23,12 @@ Audits a release candidate on seven checks, scaled to its launch tier, and retur
   itself. Fetched data counts as evidence only when it carries a cited path or query; uncited
   fetched data is an assumption; data that exists nowhere is a named data pull, never a finding.
 - In a repo, check instrumentation, flags, migrations and tests before marking a check failed.
-- Persistence: before starting, look in `<dir>` for plan-prd and plan-split outputs, and kill
-  criteria from plan-prd or plan-direction.
+- Persistence: before starting, look in `<dir>` for plan-prd and plan-split outputs, kill
+  criteria from plan-prd or plan-direction, and learn-experiment cards (`learn-experiment-*.md`)
+  — when a ramp carries an experiment, the card's logging and assignment needs are launch
+  requirements, so learn-experiment runs before launch-read. A ramp the PRD says carries an
+  experiment, with no card found, fails check 1. Read plan-improve's rewrite (`plan-improve-*.md`)
+  as the PRD when it is the newer one for the topic, and name the file used.
 
 ## Stance
 
@@ -35,8 +39,10 @@ evidence.
 
 ## Procedure — the seven checks
 
-Where a check needs an artifact that neither the input nor a cited fetch provides (a risk
-register, a comms plan, a metric inventory), the check fails on that absence — owners are
+Where a check needs content that neither the input nor a cited fetch provides (risk scenarios
+with owners, a comms plan, a metric inventory), the check fails on that absence — content in
+any form counts (a Slack thread with owners and dates is a risk register; a named heading with
+nothing under it is not) — owners are
 recorded as "unnamed — must be named", never invented.
 
 **Launch tier first.** Name the tier; it sets which checks apply in full and which are relaxed.
@@ -50,19 +56,29 @@ If the tier is neither stated nor answered, audit at GA and say so.
   beta invitation and its exit terms.
 - **GA** — every user, or any external announcement or press: all seven checks in full.
 
+The tier basis states absolute exposure (users or orders per week), not only the share. A
+flag-gated release with no external announcement is a flagged ramp at any share; at a share
+large enough that support will see questions on the first day, check 4's relaxed bar needs
+support briefed before the flag opens, not after.
+
 A relaxed check is audited against its relaxed bar and marked "relaxed (tier)" in the checklist.
 The no-go rules and the three-failure limit apply at every tier. Widening a ramp or beta to GA is
 a new audit at GA tier.
 
 1. **Instrument check.** Every PRD outcome metric has a live dashboard or report that already
    works on staging with seeded data. A launch whose success cannot be observed on day one is a
-   failed launch with a press release. Unmeasurable metric = condition or no-go. A number with
-   no named source — furnished in the input, or fetched with a cited path or query — is an
-   assumption, never a finding.
+   failed launch with a press release. Unmeasurable metric = condition or no-go. A number with a
+   checkable source named for it — whether furnished in the input or fetched with a cited path
+   or query — is evidence; a number with no named source is an assumption, never a finding.
+   Counter-metrics are outcome metrics too. When the ramp carries an experiment, assignment is
+   logged per unit from the first exposure and the sample-ratio check runs on staging; a
+   condition on a logging gap falls due before the flag opens, never after it, because data
+   missed at the first exposure cannot be recovered.
 2. **Criteria sweep.** Every requirement's pass/fail actually run on the release candidate — full
    sweep, no sampling. List the unverified explicitly; unverified is not unknown, it is a number.
 3. **Risk sweep.** Top-3 failure scenarios, each with: owner, detection signal (where the alarm
-   appears), and first response. The rollback plan is named and rehearsed — "just roll it back"
+   appears), and first response. Consider every shared system the change writes to (inventory,
+   pricing and promotions, payments, ledgers, notifications) and peak load. The rollback plan is named and rehearsed — "just roll it back"
    without data/reverse-migration consideration is a wish, not a plan. A feature-flag kill switch
    is a valid rollback when it has been tested: the flag was turned off on staging or in
    production and the feature went dark, on a stated date. The flag does not undo data the
@@ -72,7 +88,10 @@ a new audit at GA tier.
 5. **Comms readiness.** Who hears what, when: internal, customers, and any specifically loud
    stakeholder. Dates, owners, drafted artifacts.
 6. **Open-question audit.** Any PRD open question past its deadline blocks launch until re-dated
-   with reason or closed. Stale unknowns do not age into safety.
+   with reason or closed. Stale unknowns do not age into safety. When the release ships with a
+   default answer to the question (a vendor's default setting, a config value), it cannot be
+   re-dated: the default is the answer, and it is closed only by an owner accepting it in
+   writing or changing it.
 7. **Kill criteria armed.** The launch has its own dated, metric-triggered kill criteria (from
    plan-prd/plan-direction). If none exist, that is itself a finding.
 
@@ -82,9 +101,13 @@ a new audit at GA tier.
 - **go-with-conditions** — conditions named: what, owner, deadline, and what happens if the
   deadline passes (auto-no-go or re-audit). One or two ordinary failed checks are conditions;
   three or more failed checks make the verdict no-go.
-- **no-go** — with the shortest path to go, as a re-audit checklist. An unmeasurable primary metric,
-  an unrun security-boundary criterion, or an open question past deadline is a no-go on its own,
-  never a condition.
+- **no-go** — with the shortest path to go, as a re-audit checklist, and the next ship window if
+  that path is not closed in time (a change freeze, the next release train, a peak calendar) —
+  a fact about the decision, not pressure. An unmeasurable primary metric, an unrun
+  security-boundary criterion (authentication, access control, or personal data leaving the
+  organization's control, such as a data-processing agreement not fully executed or not cleared
+  by legal for live data), or an open question
+  past deadline is a no-go on its own, never a condition.
 - **Working with thin data:** when the org has no staging dashboards or no clean instrumentation
   at all, a primary metric that can still be read on day one by a named interim method (a saved
   production query, a manual export, a log count) is measurable but unverified, and gets
@@ -124,7 +147,7 @@ response) -> the top-5 predicted inbound questions, for learn-triage to check af
 
 ## Rules that always apply
 
-Output file: `<dir>` is the working directory, unless the user or harness names another; never the input's own directory. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+Output file: `<dir>` is the working directory, unless the user or harness names another; never the folder the input file sits in unless the user or harness named that folder. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
 
 Files between skills: when reading another run's file, use the most recent one whose topic matches the input and name the file used in the body; if more than one plausibly matches, ask — it counts toward the question budget. Never overwrite: the filename carries the date (`<skill>-<slug>-YYYY-MM-DD.md`); if today's file already exists, add `-2` (then `-3`) and say so in the body. Never silently replace an earlier run's file.
 
@@ -134,4 +157,4 @@ Budget and overflow: the header holds only the verdict, its confidence and one-c
 
 Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
 
-Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it.
+Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it. The closing message offers it in one line, since most users will not know to ask.

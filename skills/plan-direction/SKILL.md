@@ -2,7 +2,7 @@
 name: plan-direction
 description: "Weigh 2-4 competing product directions and recommend one: frozen weighted criteria, reasoning-trap audit, reversibility and sequencing, kill criteria. Use when the debate is which bet to make next."
 metadata:
-  version: "0.4.0"
+  version: "0.5.0"
   inspired-by: "see CREDITS.md"
 ---
 
@@ -56,7 +56,7 @@ starts, any weight change is a logged revision event with a stated reason — ne
 
 ### 3. Score every option
 
-Scale: score each criterion 1-5; weighted = weight x score / 5 (each column maxes at its weight; totals max 100). State the scale in the memo. All options x all criteria x all scores, visible in one table; rejected options keep their numbers visible. Include deliberate inaction as a row whenever deferring is a live stance in the debate — a bet on hold is an option and is scored like one.
+Scale: score each criterion 1-5; weighted = weight x score / 5 (each column maxes at its weight; totals max 100). For a cost or risk criterion, 5 = least cost or risk; say so in the table. State the scale in the memo. All options x all criteria x all scores, visible in one table; rejected options keep their numbers visible. Include deliberate inaction as a row whenever deferring is a live stance in the debate — a bet on hold is an option and is scored like one.
 
 The weighted table structures the debate; it does not settle it. Each 1-5 score is a judgement
 written as a number, so a few points' difference in the totals is noise, and the recommendation
@@ -79,7 +79,7 @@ Four probes. Each answered with what was found, or "checked, clean":
 
 Tag each option: cheap-to-reverse | hard-to-reverse | foreclosing (kills the other paths for the
 planning horizon). If the winner forecloses, raise the evidence bar or carve a cheap first
-increment that preserves optionality. Within 10 points (on the 100 scale), the totals don't decide; prefer the option whose compounding cheap wins land earliest.
+increment that preserves optionality. Within 10 points (on the 100 scale), the totals don't decide; prefer the cheap-to-reverse option whose compounding wins land earliest. A hard-to-reverse or foreclosing option never wins a tie: it has to win on evidence.
 
 ### 6. Write the memo
 
@@ -88,7 +88,7 @@ increment that preserves optionality. Within 10 points (on the 100 scale), the t
   actions, each with an owner. This header is the memo's verdict; it is not repeated elsewhere.
 - The frozen-criteria score table, with the criteria's provenance: supplied, confirmed, or never
   seen by the user
-- Gain / Lose / Why-now for the recommended option
+- Gain / Lose / Why-now for the recommended option; Why-now names any dated clock (a code freeze, a peak season, a renewal) and what it does and does not justify
 - Reversibility tags + execution sequence (what runs first, what it unblocks)
 - Kill criteria: metric-triggered and dated ("if pilot listening-time lift is under 2 min/week over the 18-minute baseline by 2027-03-16, stop and reassess")
 - Predictions: 2-4 dated, checkable predictions the recommendation implies (metric + threshold + date), for learn-retro to score.
@@ -113,7 +113,7 @@ clear" beats a hedge.
 
 ## Rules that always apply
 
-Output file: `<dir>` is the working directory, unless the user or harness names another; never the input's own directory. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+Output file: `<dir>` is the working directory, unless the user or harness names another; never the folder the input file sits in unless the user or harness named that folder. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
 
 Files between skills: when reading another run's file, use the most recent one whose topic matches the input and name the file used in the body; if more than one plausibly matches, ask — it counts toward the question budget. Never overwrite: the filename carries the date (`<skill>-<slug>-YYYY-MM-DD.md`); if today's file already exists, add `-2` (then `-3`) and say so in the body. Never silently replace an earlier run's file.
 
@@ -123,4 +123,4 @@ Budget and overflow: the header holds only the verdict, its confidence and one-c
 
 Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
 
-Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it.
+Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it. The closing message offers it in one line, since most users will not know to ask.

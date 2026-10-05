@@ -2,7 +2,7 @@
 name: learn-triage
 description: "Convert a raw dump of tickets, feedback, and requests into prioritized signal and routing decisions. Use when feedback volume arrives (support export, reviews, sales notes) and the next plan cycle needs to know what it means."
 metadata:
-  version: "0.4.0"
+  version: "0.5.0"
   inspired-by: "see CREDITS.md"
 ---
 
@@ -15,7 +15,10 @@ Turns a raw feedback dump into weighted, verified clusters, each routed: fix-now
 ## Inputs
 
 - Required: the raw dump — tickets, reviews, survey answers, sales notes — with each item's
-  source.
+  source, and how the dump was selected (full export, date range, search terms, sample). When
+  the selection is not exhaustive, the memo says so beside the weight scale, and weights rank
+  clusters within this dump only, never how common a pain is overall. When it is not stated,
+  it is the first question.
 - Missing pieces: ask at most 2 questions, then proceed on stated assumptions. If the input is
   already a complete dossier, proceed with zero questions.
 - The agent may fetch support tags, usage, and churn data itself. Fetched data counts as evidence
@@ -46,7 +49,10 @@ ledger stays auditable. Praise is signal about what to protect, never about what
    predicted and seen, predicted and absent, or seen but unpredicted. An unpredicted cluster of
    weight is a support-readiness gap for the next launch-read.
 3. **Weight clusters:** frequency x source diversity x severity (revenue/retention impact).
-   Default scale: frequency = distinct reporters (one account's or person's repeats count once);
+   Default scale: frequency = distinct reporters (one account's or person's repeats count once;
+   where identity cannot be matched across channels, such as anonymous app-store reviews,
+   frequency is an upper bound and says so; if the route would differ at the lowest count the
+   items allow, route on that lower count);
    diversity = distinct source channels; severity 1-3
    (1 = annoyance, 2 = blocks a task or costs time or money, 3 = cancellation or churn named).
    Reuse the scale of any earlier `learn-triage-*.md` in `<dir>` so weights compare across runs;
@@ -63,15 +69,20 @@ ledger stays auditable. Praise is signal about what to protect, never about what
    to-experiment (or a named data pull), and carries an explicit promotion rule: to-plan stays
    reserved for verified problems, save the two flagged routes below — frequency alone never
    promotes.
-   **Data that exists but was not checked:** a cluster with 3 or more distinct source channels
-   and top-band severity, whose verifying data exists in the org but was not checked, routes
+   **The flag bar** for the two flagged routes below: 3 or more distinct source channels,
+   top-band severity, and at least 5 distinct reporters (a default the user may override). The
+   reporter floor matters because one churn survey can make top-band severity cheap.
+   **Data that exists but was not checked:** a cluster that clears the flag bar, whose verifying data exists in the org but was not checked, routes
    `to-plan (pending pull)`, not to-experiment: plan it, pending the pull. The gate is the same as
    for provisional — the named data pull, its owner and its date; the pull's result upgrades it
    to to-plan or sends it back to to-experiment; until then plan-prd reads it as it reads
-   provisional (below). Below that bar, an unchecked cluster is UNVERIFIED as above.
+   provisional (below). Below that bar, an unchecked cluster is UNVERIFIED as above. When some
+   of the verifying data exists and some does not (the outcome is tracked, the behavior's event
+   is not), route on the data that exists — pending pull — and hand the missing data to
+   plan-prd as an instrumentation item.
    **Working with thin data:** when the verifying data does not exist in the org at all (no
    support tags, no usage instrumentation, no churn records; not merely unfetched), a cluster
-   with 3 or more distinct source channels and top-band severity routes to-plan with an explicit
+   that clears the flag bar routes to-plan with an explicit
    "provisional" flag, not to-experiment. The flag states plainly what is missing and names what
    would settle it: the data pull or instrument that upgrades it to to-plan or sends it back to
    to-experiment, with an owner and a date. plan-prd takes the reports as evidence that people
@@ -80,12 +91,13 @@ ledger stays auditable. Praise is signal about what to protect, never about what
 5. **Route each cluster:**
    - fix-now (bug — severity + owner). A bug routes fix-now regardless of which cluster its pain
      rides in; split it out with a one-line rationale.
-   - to-plan (verified problem — feeds plan-prd's evidence ledger; "to-plan (provisional)" only
+   - to-plan (verified problem — names the team that owns the plan; feeds plan-prd's evidence ledger; "to-plan (provisional)" only
      under the thin-data rule in step 4, "to-plan (pending pull)" only under its unchecked-data
      rule)
    - to-experiment (uncertain — feeds learn-experiment; an unverified cluster below the
-     three-channel, top-band bar starts here with a named data pull, not in to-plan)
-   - to-relationship (account-specific — an owner, not a roadmap)
+     flag bar starts here with a named data pull, not in to-plan)
+   - to-relationship (account-specific — an account owner, or support in a consumer product;
+     not a roadmap)
    - dismiss (with reason)
 6. **Trap sweep:** solution-wishes recorded as demands; praise treated as build guidance; a
    churn-threat from n=1 conflated with product signal (that is account management until the
@@ -124,7 +136,7 @@ the full ledger.
 
 ## Rules that always apply
 
-Output file: `<dir>` is the working directory, unless the user or harness names another; never the input's own directory. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+Output file: `<dir>` is the working directory, unless the user or harness names another; never the folder the input file sits in unless the user or harness named that folder. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
 
 Files between skills: when reading another run's file, use the most recent one whose topic matches the input and name the file used in the body; if more than one plausibly matches, ask — it counts toward the question budget. Never overwrite: the filename carries the date (`<skill>-<slug>-YYYY-MM-DD.md`); if today's file already exists, add `-2` (then `-3`) and say so in the body. Never silently replace an earlier run's file.
 
@@ -134,4 +146,4 @@ Budget and overflow: the header holds only the verdict, its confidence and one-c
 
 Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
 
-Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it.
+Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it. The closing message offers it in one line, since most users will not know to ask.

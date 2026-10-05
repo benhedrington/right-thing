@@ -2,7 +2,7 @@
 name: learn-retro
 description: "Compare expected vs actual after a launch or planning cycle; extract behavior-changing learnings and a prediction-calibration note. Use 60-90 days post-launch, post-quarter, or after any plan's results are in."
 metadata:
-  version: "0.4.0"
+  version: "0.5.0"
   inspired-by: "see CREDITS.md"
 ---
 
@@ -21,7 +21,8 @@ Scores a plan's quoted expectations against actuals and turns each gap into a le
 - The agent may fetch the dashboards, exports and account records behind the actuals itself.
   Fetched data counts as evidence only when it carries a cited path or query; uncited fetched
   data is an assumption; data that exists nowhere is a named data pull, never a finding.
-- Persistence: before starting, look in `<dir>` for plan-prd's outcome targets (`plan-prd-*.md`),
+- Persistence: before starting, look in `<dir>` for plan-prd's outcome targets (`plan-prd-*.md`,
+  or plan-improve's rewrite `plan-improve-*.md` when it is the newer PRD for the topic),
   plan-direction's predictions (`plan-direction-*.md`), and learn-experiment's pre-registered
   decision rules and guardrail thresholds (`learn-experiment-*.md`).
 
@@ -42,9 +43,14 @@ plan, not passes.
    quoted expectations too, scored against the rule as written before the data — never as
    reread after it.
 2. **Actuals table.** Same rows, measured values, each with a named source (dashboard, export,
-   support tags). A number with no named source — furnished in the input, or fetched with a cited
-   path or query — is an assumption, never a finding. An unsourced
-   qualitative actual is an anecdote, marked as one.
+   support tags). A number with a checkable source named for it — whether furnished in the input
+   or fetched with a cited path or query — is evidence; a number with no named source is an
+   assumption, never a finding. An unsourced
+   qualitative actual is an anecdote, marked as one. Where a holdout or control group exists, the
+   actual shows both the value as written and the treatment-minus-control lift: the delta scores
+   the plan as written, and the calibration note uses the lift, so drift and seasonality are not
+   credited to the feature. Where actuals exist per platform or segment and diverge in direction,
+   add diagnostic sub-rows (not tallied) and name the divergence in the header.
 3. **Delta per row:** beat | met | missed | unmeasured. Unmeasured is a defect of the plan — the
    retro names which planning choice caused the gap (usually an outcome chain without its
    measurement deliverable). An expectation the record never addresses is unmeasured, not met,
@@ -54,7 +60,8 @@ plan, not passes.
 5. **Learning extraction.** Each learning states a CHANGE, not an observation. "Comms were late" is
    an observation; "launch-comms owner is now named at plan-prd's decision-clock stage" is a
    learning. Each learning has an owner and lands somewhere (a skill, a plan item, a policy).
-6. **Calibration note.** State the fraction of predictions that proved right, scoring
+6. **Calibration note.** State the fraction of predictions that proved right, separately for
+   outcome predictions and delivery predictions (dates, scope), scoring
    plan-direction's dated predictions and learn-experiment's hypothesized effect sizes where they
    exist. Name any over-optimism or over-pessimism; the note feeds the confidence levels of
    future plan-direction memos.
@@ -63,7 +70,7 @@ plan, not passes.
 ## Output format
 
 Decision header, first: a one-sentence verdict (did the plan land — the
-beat / met / missed / unmeasured tally); confidence (high/medium/low) with its basis; the top 3
+primary outcome's delta first, then the beat / met / missed / unmeasured tally); confidence (high/medium/low) with its basis; the top 3
 actions, each with an owner.
 
 Then: expectation vs actual table (row | expected, quoted | actual + source | delta) -> surprises ->
@@ -89,7 +96,7 @@ Steps 1-2 may share one merged table, provided it keeps the source column.
 
 ## Rules that always apply
 
-Output file: `<dir>` is the working directory, unless the user or harness names another; never the input's own directory. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+Output file: `<dir>` is the working directory, unless the user or harness names another; never the folder the input file sits in unless the user or harness named that folder. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
 
 Files between skills: when reading another run's file, use the most recent one whose topic matches the input and name the file used in the body; if more than one plausibly matches, ask — it counts toward the question budget. Never overwrite: the filename carries the date (`<skill>-<slug>-YYYY-MM-DD.md`); if today's file already exists, add `-2` (then `-3`) and say so in the body. Never silently replace an earlier run's file.
 
@@ -99,4 +106,4 @@ Budget and overflow: the header holds only the verdict, its confidence and one-c
 
 Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
 
-Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it.
+Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it. The closing message offers it in one line, since most users will not know to ask.

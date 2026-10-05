@@ -1,8 +1,8 @@
 ---
 name: plan-prd
-description: "Turn messy real-world PM input — forwarded sales notes, stakeholder asks, call summaries — into a problem-anchored PRD. Use when raw product requests arrive and a PRD is needed, not when a clean spec already exists."
+description: "Turn messy real-world PM input — sales notes, stakeholder asks, call summaries, reviews and support tickets, analytics — into a problem-anchored PRD. Use when raw product requests arrive and a PRD is needed; when a draft PRD already exists, use plan-improve."
 metadata:
-  version: "0.4.0"
+  version: "0.5.0"
   inspired-by: "see CREDITS.md"
 ---
 
@@ -22,8 +22,13 @@ Turns sales notes, stakeholder asks and call summaries into a problem-anchored P
   records, prior PRDs) itself. Fetched data counts as evidence only when it carries a cited path
   or query; uncited fetched data is an assumption; data that exists nowhere is a named data pull,
   never a finding.
+- A draft PRD for the same topic, supplied or found: recommend plan-improve. If the user still
+  wants a new PRD, the draft's items enter the ledger as proposed-solution fragments, never used
+  unledgered, and the PRD names the draft it supersedes.
 - Persistence: before starting, look in `<dir>` for learn-triage's to-plan signal memo
-  (`learn-triage-*.md`) — its verified clusters enter the ledger; plan-direction's memo
+  (`learn-triage-*.md`) — its verified clusters enter the ledger; learn-retro's next-cycle
+  handoffs addressed to plan-prd (`learn-retro-*.md`) — each enters as a constraint and its
+  learning is applied or declined with a reason; plan-direction's memo
   (`plan-direction-*.md`) — its chosen direction, riskiest assumption and kill criteria feed the
   problem statement, the open questions and the outcomes; and learn-experiment's cards
   (`learn-experiment-*.md`) — a ship result is evidence for the ledger.
@@ -53,8 +58,10 @@ Decompose ALL input into one-line fragments before writing anything:
   measured and no more — a non-randomized result shows interest or usability, never a lift. A
   card with no result yet is an assumption.
 
-A number with no named source — furnished in the input, or fetched with a cited path or
-query — is an assumption, never a finding. A named source is a checkable
+A number is evidence when a checkable source is named for it — whether the number was furnished
+in the input (even relayed by a person: "2,100 a month, per the support dashboard") or fetched
+with a cited path or query. A number with no named source is an assumption, never a finding. A
+named source is a checkable
 one ("the August billing export", not "we hear"). A venue without a named owner ("a figure
 someone quoted at the offsite") is an assumption, not evidence. Commercial or commitment claims
 ("they'd roll it out to every region") are problem-signal (demand-side) at assumption confidence
@@ -84,12 +91,30 @@ The ledger is the audit trail: every later section cites fragment IDs.
   evidence", which names the one source, states plainly what is missing, and names the source that
   would upgrade it to a full PRD. Scope is cut to what that one source supports; producing the
   missing second source is requirement #1; confidence is never high. Zero evidence sources, or a
-  second source that exists but was not fetched, still gets the discovery note or the named data
-  pull.
+  second source that exists but was not fetched (the input points to it but gives no figure from
+  it), still gets the discovery note or the named data pull.
+- A learn-triage cluster routed `to-plan (provisional)` or `to-plan (pending pull)` is read the
+  same way in both cases: its reports from distinct channels count toward the 2-source gate as
+  evidence that people report the pain; its size stays an assumption, and the flagged pull is an
+  open question that gates the build commitment, not the PRD.
 
 ### 3. Define outcomes as a chain
 
 behavior change -> metric -> baseline -> target -> timeframe -> measurement method.
+
+A target with no business case and no plan-direction source behind it is labeled "PM choice",
+and its size is an open question owned by learn-experiment, with the break-even it must clear.
+A date with no capacity basis yet is written as a target, with the sizing that will confirm it
+(owner, date).
+
+Timeframe names when the metric can first be read, not only when the target should be hit: a
+cohort metric (week-4 retention, trial-to-paid at day 8, 30-day repeat purchase) is readable only
+after its window closes on the last cohort counted. Where the product ships on separate platforms
+or channels with separate data, baselines and targets are per platform.
+
+Name at least one counter-metric the change could hurt (cost or margin per unit, an adjacent
+surface such as notification opt-outs or checkout conversion), with its baseline and a
+must-not-cross bar. It is an outcome like any other: launch-read audits it, learn-retro scores it.
 
 No baseline? Then instrumenting it is deliverable #1. "Success: users are happier" fails the chain
 (no baseline, no size-of-win, no method).
@@ -113,7 +138,9 @@ List committed work, other teams' calendars, and shared systems this touches. Ev
   each: a testable bar, "not touched" with the reason, or an owned open question. They do not
   count toward the 8.
 - Rollout: how the build reaches users (flagged ramp, beta, GA) and in what stages — the tier
-  launch-read will audit.
+  launch-read will audit. When the change ships in a binary (a mobile or desktop app): the
+  release train and date per platform, store-review risk, the minimum app version, and which
+  steps need a new binary and which only a flag or config change.
 
 ### 6. Handle the decision clock
 
@@ -126,7 +153,9 @@ choice and the reason. Clock pressure never silently expands scope.
 
 Open questions table: question | owner | deadline | consequence-if-unanswered.
 "None" is allowed only when the ledger holds zero unknown-confidence fragments. plan-direction's
-riskiest assumption is a row unless a ledgered result has retired it.
+riskiest assumption is a row unless a ledgered result has retired it. A question an experiment
+should answer (a target waiting on a baseline, a riskiest assumption) says so in its owner cell
+("learn-experiment"), so the card picks it up.
 
 ## Output format
 
@@ -159,7 +188,7 @@ riskiest assumption is a row unless a ledgered result has retired it.
 
 ## Rules that always apply
 
-Output file: `<dir>` is the working directory, unless the user or harness names another; never the input's own directory. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+Output file: `<dir>` is the working directory, unless the user or harness names another; never the folder the input file sits in unless the user or harness named that folder. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
 
 Files between skills: when reading another run's file, use the most recent one whose topic matches the input and name the file used in the body; if more than one plausibly matches, ask — it counts toward the question budget. Never overwrite: the filename carries the date (`<skill>-<slug>-YYYY-MM-DD.md`); if today's file already exists, add `-2` (then `-3`) and say so in the body. Never silently replace an earlier run's file.
 
@@ -169,4 +198,4 @@ Budget and overflow: the header holds only the verdict, its confidence and one-c
 
 Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
 
-Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it.
+Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it. The closing message offers it in one line, since most users will not know to ask.

@@ -54,7 +54,7 @@ The full defect list, tables and workings follow below the header.
 | `learn-experiment` — experiment design | Turns a falsifiable hypothesis into a pre-registered experiment card: decision rule first, arithmetic shown, guardrails, stop conditions. |
 | `learn-triage` — feedback triage | Turns a feedback dump into a ledger, pain clusters, verification, and routing (fix-now / to-plan / to-experiment / to-relationship / dismiss). |
 
-> **Status: early, version 0.4.0.** We ran each skill blind on a deliberately strong input,
+> **Status: early, version 0.5.0.** We ran each skill blind on a deliberately strong input,
 > written by the same team that wrote the skills. Most gave the expected verdict. `plan-improve`
 > and `learn-triage` leaned cautious and were recalibrated; on re-test they returned
 > build-ready-with-fixes and to-plan (pending pull). If a verdict seems too harsh, push back. The
@@ -69,20 +69,26 @@ The skills are built to run in this order, each one picking up the earlier ones'
 learn-triage → plan-prd → plan-improve → plan-split → launch-read → learn-retro →
 plan-direction → plan-prd
 
-with a side branch for tests: learn-triage → learn-experiment → plan-prd / learn-retro.
+with a side branch for tests: learn-triage, plan-direction or plan-prd → learn-experiment →
+launch-read (when a ramp carries the test) → plan-prd / learn-retro.
 
 Each file is saved to the working directory, unless you or the agent's harness name another.
 Before starting, each skill looks there for what came before it:
 
-- `plan-prd` reads learn-triage's to-plan clusters, plan-direction's chosen direction (with its
-  riskiest assumption and kill criteria), and learn-experiment's ship results.
-- `plan-improve` reads an existing PRD, often plan-prd's.
+- `plan-prd` reads learn-triage's to-plan clusters, learn-retro's handoffs addressed to it,
+  plan-direction's chosen direction (with its riskiest assumption and kill criteria), and
+  learn-experiment's ship results.
+- `plan-improve` reads the PRD you give it; with none given, an existing PRD, often plan-prd's.
 - `plan-split` reads plan-prd's PRD or plan-improve's rewrite.
-- `launch-read` reads plan-prd and plan-split, and kill criteria from plan-prd or plan-direction.
-- `learn-retro` reads plan-prd's outcome targets, plan-direction's predictions, and
+- `launch-read` reads plan-prd (or plan-improve's rewrite, whichever is newer) and plan-split,
+  kill criteria from plan-prd or plan-direction, and learn-experiment's cards when the release
+  carries a test. Run learn-experiment first when a ramp is the test.
+- `learn-retro` reads plan-prd's (or plan-improve's) outcome targets, plan-direction's predictions, and
   learn-experiment's decision rules and guardrails.
 - `plan-direction` reads learn-retro's handoffs to the next cycle.
-- `learn-experiment` reads learn-triage's to-experiment clusters.
+- `learn-experiment` reads learn-triage's to-experiment clusters, plan-direction's riskiest
+  assumption, plan-prd's outcomes, counter-metrics and the open questions it hands over, and
+  learn-retro's calibration note.
 - `learn-triage` reads earlier triage runs (to reuse their weight scale) and launch-read's
   predicted inbound questions.
 

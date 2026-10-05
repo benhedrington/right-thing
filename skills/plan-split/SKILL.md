@@ -2,7 +2,7 @@
 name: plan-split
 description: "Slice a PRD into epics and stories with testable acceptance criteria and dependency edges. Use after plan-prd when build planning starts, or when a plan needs to become assignable engineering work."
 metadata:
-  version: "0.4.0"
+  version: "0.5.0"
   inspired-by: "see CREDITS.md"
 ---
 
@@ -35,9 +35,10 @@ distributes the vagueness.
 ## Procedure
 
 ### 1. Map requirements to epics
-An epic is a user-visible outcome slice: something an end user, a customer, or a customer-side
-admin can experience (a recurring report an admin reads qualifies); plumbing that serves no
-visible outcome does not. An epic is never a team's component (no "backend epic", no "infra
+An epic is a user-visible outcome slice: something an end user, a customer, a customer-side
+admin, or an internal operator whose workflow the PRD names as part of the problem (a support
+agent, warehouse staff) can experience (a recurring report an admin reads qualifies); plumbing
+that serves no visible outcome does not. An epic is never a team's component (no "backend epic", no "infra
 epic"). Every requirement lands in exactly one epic. One requirement may span several stories,
 and each of those stories inherits that requirement's criteria. Requirements that fit nowhere go
 to the overflow table. Overflow is resolved BEFORE build starts, by descoping or re-scoping the
@@ -62,7 +63,9 @@ the story tables. A dependency that is also a contingency (a conditional require
 with its condition; the plan states what the epic looks like both ways.
 
 ### 5. Size check
-A story bigger than ~one week or needing two engineers together is split again. An epic with no
+A story bigger than ~one week or needing two engineers together is split again. The check
+covers QA and any shared role the PRD names: a story whose verification needs more QA time than
+is available is flagged, not assumed. An epic with no
 demoable story inside two weeks of work is re-sliced. Put story size estimates in the story id
 cell or in the size-check section, and say which.
 
@@ -105,7 +108,7 @@ The PRD's fragment citations ride along — a reviewer can walk story -> require
 
 ## Rules that always apply
 
-Output file: `<dir>` is the working directory, unless the user or harness names another; never the input's own directory. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
+Output file: `<dir>` is the working directory, unless the user or harness names another; never the folder the input file sits in unless the user or harness named that folder. Name the path in the closing message. Refusals write the file too. The decision header alone may answer a quick question; the file is still written.
 
 Files between skills: when reading another run's file, use the most recent one whose topic matches the input and name the file used in the body; if more than one plausibly matches, ask — it counts toward the question budget. Never overwrite: the filename carries the date (`<skill>-<slug>-YYYY-MM-DD.md`); if today's file already exists, add `-2` (then `-3`) and say so in the body. Never silently replace an earlier run's file.
 
@@ -115,4 +118,4 @@ Budget and overflow: the header holds only the verdict, its confidence and one-c
 
 Derived numbers: recompute every derived number from its source and show the arithmetic beside it (a header figure's may sit in the body); a claim asserts no more than its arithmetic shows. Never invent a datum or present an unsupported derivation as a source figure.
 
-Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it.
+Shareable version: if the user asks for one, produce the same document with the ledger and appendices removed and citations kept as footnotes; the decision header still opens it. The closing message offers it in one line, since most users will not know to ask.

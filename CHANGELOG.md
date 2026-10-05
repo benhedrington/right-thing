@@ -5,6 +5,59 @@ frontmatter. Versions stay below 1.0.0 while a skill is still settling. **1.0.0 
 stable release**, once a skill has been through an independent test pass. Nothing has reached 1.0.0
 yet.
 
+## 2026-10-05 — all skills at 0.5.0 (field test by two simulated PMs)
+
+Two agents played product managers, one at a direct-to-consumer retailer and one on a
+subscription mobile app. Each ran five skills on a product idea of their own and reported where
+the skills helped and where they got in the way. Every change below answers a finding that quotes
+the skill line and the output line it caused (testbench/logs/run-032-field-test.md). These are
+rule changes, so the version moves to 0.5.0.
+
+- **Handoffs that went nowhere now land.** `plan-prd` reads learn-retro's handoffs addressed to
+  it. `learn-experiment` reads plan-direction's riskiest assumption and plan-prd's outcomes and
+  open questions. `launch-read` reads learn-experiment's cards, so a ramp that carries a test
+  checks that assignment is logged from the first exposure.
+- **The ship threshold is not the MDE.** `learn-experiment` now says a test ships on a
+  significant result in the right direction. Demanding an observed effect at least as large as
+  the effect the test was sized for ships a real winner only about half the time.
+- **Read dates for slow metrics.** For week-4 retention, day-8 trial conversion and similar
+  metrics, `learn-experiment` names the earliest read date (enrollment plus the metric's window),
+  and `plan-prd`'s timeframe says when the metric can first be read.
+- **Counter-metrics.** `plan-prd` names at least one metric the change could hurt, such as margin
+  per order or notification opt-outs, with a must-not-cross bar. `launch-read` audits it.
+  `learn-experiment` says whether its sample can detect each guardrail, and calls one it cannot
+  a tripwire.
+- **One reading of "named source".** A number relayed in the input with a checkable source
+  ("2,100 a month, per the support dashboard") is evidence. The old sentence could be read either
+  way, and the stricter reading sent a PRD to a discovery note.
+- **Triage and PRD agree.** `plan-prd` now states how it reads a `to-plan (pending pull)`
+  cluster, which `learn-triage` already promised. `learn-triage` asks how the dump was selected
+  (a keyword search is not a sample), adds a 5-reporter floor to its flagged routes, and says
+  what to do when some verifying data exists and some does not.
+- **App and store releases.** `plan-prd`'s rollout and `learn-experiment`'s method cover the
+  release train per platform, store review, minimum app version, and what needs a new binary
+  versus a flag change. `learn-retro` adds unscored sub-rows when platforms move in opposite
+  directions, and scores against a holdout's lift when there is one.
+- **Smaller fixes.** `plan-direction`'s tie-break no longer favours a hard-to-reverse option.
+  `plan-split` lets internal operators such as support agents own an epic, and sizes QA as well
+  as engineering. `launch-read` gives the next ship window in a no-go, says what counts as a
+  security boundary, and judges risk content in any form rather than demanding a formal register.
+  `plan-improve` has a 14th class (missing-rollout), records contradictory goals, lists clean
+  classes instead of stretching a quote to fill them, and surfaces "exposed" nits in the header
+  without changing the severity rule. Every skill's closing message now offers the shareable
+  version.
+- **Found by the confirmation run** (fresh agents on the same inputs, plus two earlier test
+  briefs; testbench/logs/run-033-confirm.md). `learn-experiment` now gives the sample-size formula
+  for unequal arms (a 25/75 ramp), computes runtime from the sum of the arms' sizes (the old
+  "arms x n" was wrong for unequal arms), and gives a sample-ratio check that works for any
+  planned split. Its worked example now rounds up as the formula says: 25,552 per group, not
+  25,551. When plan-improve's rewrite is the newer PRD, launch-read, learn-retro and
+  learn-experiment read it instead of plan-prd's, and each of the two PRD skills names the
+  document it supersedes. `launch-read` fails check 1 when a ramp's experiment card is missing,
+  won't let an open question be re-dated while a default answer ships live, and asks for support
+  to be briefed before a large flagged ramp opens. `plan-improve` says plainly that a date the
+  PRD's own durations cannot meet is a must-fix.
+
 ## 2026-09-29 — all skills at 0.4.0 (first public release)
 
 This release changes rules, not only wording, so the version moves from 0.3 to 0.4. All eight
