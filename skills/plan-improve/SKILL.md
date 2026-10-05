@@ -1,14 +1,14 @@
 ---
 name: plan-improve
-description: "Red-pen an existing PRD: emit a defect list (each defect named, quoted, must-fix vs nit) and a rewritten build-ready PRD. Use when a PRD of unknown quality exists and needs to become usable."
+description: "Review an existing PRD and fix it: a list of the problems found (each quoted, must-fix or nit) and a rewritten, build-ready PRD. Use when a draft or existing PRD needs checking before the team builds from it."
 metadata:
-  version: "0.5.0"
+  version: "0.5.1"
   inspired-by: "see CREDITS.md"
 ---
 
 # plan-improve — defect list + build-ready rewrite
 
-Red-pens an existing PRD: a quoted defect list against a 14-item taxonomy, then a build-ready rewrite derived from it.
+Reviews an existing PRD and fixes it: a quoted defect list against a 14-item taxonomy, then a build-ready rewrite derived from it.
 
 **Output is always a file:** `<dir>/plan-improve-<slug>-YYYY-MM-DD.md`, opening `## Decision header` (**Verdict:**, **Top must-fixes:**, **Confidence:**, **Top 3 actions**); chat alone is an incomplete run.
 

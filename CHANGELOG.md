@@ -5,6 +5,13 @@ frontmatter. Versions stay below 1.0.0 while a skill is still settling. **1.0.0 
 stable release**, once a skill has been through an independent test pass. Nothing has reached 1.0.0
 yet.
 
+## 2026-10-05 — plan-improve 0.5.1 (plainer description)
+
+- `plan-improve`'s description now says "Review an existing PRD and fix it" instead of "Red-pen",
+  which is an editor's term many PMs don't use. The description is how Claude decides when to use
+  the skill, so it should match how people ask: "review my PRD", "check this draft". It also names
+  draft PRDs, in line with the README's which-skill table. No rule changed.
+
 ## 2026-10-05 — all skills at 0.5.0 (field test by two simulated PMs)
 
 Two agents played product managers, one at a direct-to-consumer retailer and one on a

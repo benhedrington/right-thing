@@ -52,7 +52,7 @@ Start from where you are. You don't have to run the skills in order.
 |---|---|
 | `plan-direction` — direction choice | Weighs 2-4 competing directions and recommends one: frozen criteria, reasoning-trap audit, reversibility, kill criteria, dated predictions. |
 | `plan-prd` — PRD writing | Turns messy real-world input (sales notes, stakeholder asks, call summaries) into a problem-anchored PRD with cited requirements. |
-| `plan-improve` — PRD review | Red-pens an existing PRD: a quoted, severity-rated defect list plus a build-ready rewrite. |
+| `plan-improve` — PRD review | Reviews an existing PRD and fixes it: a quoted, severity-rated defect list plus a build-ready rewrite. |
 | `plan-split` — story breakdown | Slices a PRD into epics and stories with testable acceptance criteria, dependency edges, and traceability. |
 
 ### Launch — before it ships
